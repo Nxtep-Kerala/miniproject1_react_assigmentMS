@@ -160,7 +160,7 @@ const AdminAssignments = () => {
           </Select>
           <TextField label="Assignment Title" required name="title" value={assignment.title} onChange={handleAssignmentChange} />
           <TextField label="Description" name="description" required value={assignment.description} onChange={handleAssignmentChange} />
-          <TextField label="Due Date" type="date" required name="dueDate" value={assignment.dueDate} onChange={handleAssignmentChange} />
+          <TextField  type="date" required name="dueDate" value={assignment.dueDate} onChange={handleAssignmentChange} />
           <Select name="format" required value={assignment.format} onChange={handleAssignmentChange}>
             <MenuItem value="online">Online</MenuItem>
             <MenuItem value="offline">Offline</MenuItem>

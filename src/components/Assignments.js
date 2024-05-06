@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { dataRef } from "../firebase-config";
-import { Box, Card, CardContent, Typography, List, ListItem, Divider, CircularProgress, Alert } from "@mui/material";
+import { Box, Card, CardContent, Typography, List, ListItem, CircularProgress, Alert } from "@mui/material";
+import "./Assignments.css"; // Import CSS file
 
 const Assignments = () => {
   const { department } = useParams();
@@ -9,6 +10,7 @@ const Assignments = () => {
   const [timetable, setTimetable] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const formattedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
@@ -26,7 +28,6 @@ const Assignments = () => {
         setError("Failed to load assignments.");
       }
     };
-
 
     const fetchTimetable = async () => {
       try {
@@ -58,31 +59,37 @@ const Assignments = () => {
   }
 
   return (
-    <Box sx={{ maxWidth: 800, mx: "auto", mt: 4 }}>
+    <Box className="assignments-container">
       <Typography variant="h4" gutterBottom>
         Assignments for {department}
       </Typography>
       {assignments.length > 0 ? (
         assignments.map((assignment, index) => (
-          <Card key={index} sx={{ mb: 2 }}>
+          <Card key={index} className="assignment-card">
             <CardContent>
-              <Typography variant="h5">{assignment.title}</Typography>
-              <Typography color="textSecondary">Due: {formatDate(assignment.dueDate)}</Typography>
-              <Typography variant="body2">{assignment.description}</Typography>
-              <Typography variant="caption">{assignment.format.toUpperCase()}</Typography>
+              <Typography variant="h5" className="assignment-title">
+                {assignment.title}
+              </Typography>
+              <Typography className="assignment-due">Due: {formatDate(assignment.dueDate)}</Typography>
+              <Typography variant="body2" className="assignment-details">
+                {assignment.description}
+              </Typography>
+              <Typography variant="caption" className="assignment-details">
+                {assignment.format.toUpperCase()}
+              </Typography>
             </CardContent>
           </Card>
         ))
       ) : (
         <Typography>No assignments available.</Typography>
       )}
-      <Typography variant="h5" sx={{ mt: 4 }}>
+      <Typography variant="h5" className="timetable-list">
         Timetable
       </Typography>
       {timetable.length > 0 ? (
         <List>
           {timetable.map((subject, index) => (
-            <ListItem key={index} divider>
+            <ListItem key={index} className="timetable-item">
               <Typography>
                 {subject.day}: {subject.subject}
               </Typography>
