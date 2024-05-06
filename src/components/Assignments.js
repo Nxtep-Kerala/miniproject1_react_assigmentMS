@@ -9,6 +9,11 @@ const Assignments = () => {
   const [timetable, setTimetable] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const formattedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+    return formattedDate;
+  };
 
   useEffect(() => {
     const fetchAssignments = async () => {
@@ -21,6 +26,7 @@ const Assignments = () => {
         setError("Failed to load assignments.");
       }
     };
+
 
     const fetchTimetable = async () => {
       try {
@@ -61,7 +67,7 @@ const Assignments = () => {
           <Card key={index} sx={{ mb: 2 }}>
             <CardContent>
               <Typography variant="h5">{assignment.title}</Typography>
-              <Typography color="textSecondary">Due: {assignment.dueDate}</Typography>
+              <Typography color="textSecondary">Due: {formatDate(assignment.dueDate)}</Typography>
               <Typography variant="body2">{assignment.description}</Typography>
               <Typography variant="caption">{assignment.format.toUpperCase()}</Typography>
             </CardContent>

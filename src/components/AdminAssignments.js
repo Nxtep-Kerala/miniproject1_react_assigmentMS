@@ -76,6 +76,12 @@ const AdminAssignments = () => {
     }
   };
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const formattedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+    return formattedDate;
+  };
+
   const handleAssignmentSubmit = async (e) => {
     e.preventDefault();
     setError(null);
@@ -163,7 +169,7 @@ const AdminAssignments = () => {
           <List>
             {assignments.map((assignment) => (
               <ListItem key={assignment.id}>
-                <ListItemText primary={`${assignment.title} - Due: ${assignment.dueDate}`} />
+                <ListItemText primary={`${assignment.title} - Due: ${formatDate(assignment.dueDate)}`} />
                 <ListItemSecondaryAction>
                   <IconButton edge="end" color="secondary" onClick={() => handleDeleteAssignment(assignment.id, assignment.department)}>
                     <DeleteIcon />
