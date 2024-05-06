@@ -20,7 +20,7 @@ import { dataRef } from "../firebase-config"; // Firebase Realtime Database refe
 const AdminAssignments = () => {
   const [adminAuthenticated, setAdminAuthenticated] = useState(false);
   const [username, setUsername] = useState("");
-  const [password, setPassword] = useState(""); // Corrected to useState
+  const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [assignment, setAssignment] = useState({
     department: "",
@@ -40,6 +40,14 @@ const AdminAssignments = () => {
       const adminData = snapshot.val();
       if (adminData && adminData.password === password) {
         setAdminAuthenticated(true);
+        // Set department from adminData if available
+        setAssignment(prev => ({
+          ...prev,
+          department: adminData.department || ""
+        }));
+        if (adminData.department) {
+          fetchAssignments(adminData.department); // Fetch assignments if department is available
+        }
       } else {
         setError("Invalid admin credentials. Please try again.");
       }
@@ -144,7 +152,7 @@ const AdminAssignments = () => {
       {error && <Alert severity="error">{error}</Alert>}
       <form onSubmit={handleAssignmentSubmit}>
         <Stack spacing={3}>
-          <Select name="department" required value={assignment.department} onChange={handleAssignmentChange} displayEmpty>
+          <Select name="department" disabled required value={assignment.department} onChange={handleAssignmentChange} displayEmpty>
             <MenuItem value="" disabled>Select Department</MenuItem>
             <MenuItem value="CSE">Computer Science and Engineering</MenuItem>
             <MenuItem value="BT">Biotechnology</MenuItem>
@@ -152,7 +160,7 @@ const AdminAssignments = () => {
           </Select>
           <TextField label="Assignment Title" required name="title" value={assignment.title} onChange={handleAssignmentChange} />
           <TextField label="Description" name="description" required value={assignment.description} onChange={handleAssignmentChange} />
-          <TextField  type="date" required name="dueDate" value={assignment.dueDate} onChange={handleAssignmentChange} />
+          <TextField label="Due Date" type="date" required name="dueDate" value={assignment.dueDate} onChange={handleAssignmentChange} />
           <Select name="format" required value={assignment.format} onChange={handleAssignmentChange}>
             <MenuItem value="online">Online</MenuItem>
             <MenuItem value="offline">Offline</MenuItem>
