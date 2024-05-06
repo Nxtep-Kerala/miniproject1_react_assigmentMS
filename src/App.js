@@ -4,12 +4,14 @@ import { auth } from './firebase-config';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 // Update these imports to default imports
-import LoginForm from './components/LoginForm';
+import LoginForm from './components/LoginForm'; // Updated to default import
 import RegistrationForm from './components/RegistrationForm';
 import StudentDashboard from './components/StudentDashboard';
 import TeacherDashboard from './components/TeacherDashboard';
 import Profile from './components/Profile';
-import Navbar from './components/Navbar';  // Ensure this is correct as per the export in the file
+import Navbar from './components/Navbar';
+
+import arun from './components/arun';
 
 function App() {
   const [user, loading, error] = useAuthState(auth);

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { loginUser } from '../AuthService';
 
-const Login = () => {
+
+const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -25,4 +26,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginForm;
