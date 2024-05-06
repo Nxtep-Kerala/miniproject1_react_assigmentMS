@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { dataRef } from "../firebase-config";
-import { Box, Card, CardContent, Typography, List, ListItem, CircularProgress, Alert } from "@mui/material";
+import { Box, Card, CardContent, Typography, List, ListItem, CircularProgress, Alert, Button} from "@mui/material";
 import "./Assignments.css"; // Import CSS file
 
 const Assignments = () => {
@@ -59,6 +59,30 @@ const Assignments = () => {
     fetchData();
   }, [department]);
 
+  const handleLogout = () => {
+    // Perform logout actions here (e.g., clearing session, local storage)
+    // Redirect to the login page
+    window.location.href = "/login";
+  };
+
+  // Prevent navigating back to this page after logout
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      // Cancel the navigation attempt
+      event.preventDefault();
+      // Manually reset the URL to the current page
+      window.history.pushState(null, "", window.location.href);
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      // Clean up the event listener on component unmount
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+
   if (loading) {
     return <CircularProgress />;
   }
@@ -69,6 +93,9 @@ const Assignments = () => {
 
   return (
     <Box className="assignments-container">
+      <Button variant="contained" color="primary" onClick={handleLogout}>
+        Logout
+      </Button>
       <Typography variant="h4" gutterBottom>
         Assignments for {department}
       </Typography>
