@@ -11,8 +11,6 @@ import TeacherDashboard from './components/TeacherDashboard';
 import Profile from './components/Profile';
 import Navbar from './components/Navbar';
 
-import arun from './components/arun';
-
 function App() {
   const [user, loading, error] = useAuthState(auth);
 
