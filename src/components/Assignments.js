@@ -23,7 +23,16 @@ const Assignments = () => {
         const assignmentsRef = dataRef.ref(`assignments/${department}`);
         const snapshot = await assignmentsRef.once("value");
         const data = snapshot.val();
-        setAssignments(data ? Object.values(data) : []);
+        const unsortedAssignments = data ? Object.values(data) : [];
+
+        // Sort assignments by dueDate
+        const sortedAssignments = unsortedAssignments.sort((a, b) => {
+          const dateA = new Date(a.dueDate);
+          const dateB = new Date(b.dueDate);
+          return dateA - dateB;
+        });
+
+        setAssignments(sortedAssignments);
       } catch (err) {
         setError("Failed to load assignments.");
       }
