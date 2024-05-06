@@ -4,10 +4,12 @@ import LoginForm from "./components/LoginForm";
 import RegistrationForm from "./components/RegistrationForm";
 import Assignments from "./components/Assignments";
 import AdminAssignments from "./components/AdminAssignments.js";
+import Navbar from "./components/Navbar.js";
 
 function App() {
   return (
     <Router>
+      <Navbar/>
       <Routes>
         <Route path="/login" element={<LoginForm />} />
         <Route path="/register" element={<RegistrationForm />} />
