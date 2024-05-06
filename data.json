@@ -1,0 +1,34 @@
+{
+    "admin": {
+      "admin1": {
+        "username": "admin1",
+        "password": "strongPassword123"
+      },
+      "admin2": {
+        "username": "admin2",
+        "password": "anotherStrongPassword"
+      }
+    },
+    "assignments": {
+      "CSE": {
+        "assignment1": {
+          "title": "Data Structures Assignment",
+          "dueDate": "2024-05-10",
+          "format": "online"
+        },
+        "assignment2": {
+          "title": "Operating Systems Project",
+          "dueDate": "2024-05-15",
+          "format": "offline"
+        }
+      },
+      "BT": {
+        "assignment1": {
+          "title": "Genetics Assignment",
+          "dueDate": "2024-05-12",
+          "format": "online"
+        }
+      }
+    }
+  }
+  

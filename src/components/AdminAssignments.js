@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Box,
   TextField,
@@ -34,86 +34,21 @@ const AdminAssignments = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError(null); // Reset error state
+    setError(null);
 
     try {
       // Validate admin credentials against Firebase Realtime Database
-      const adminRef = dataRef.ref("admin").child(username); // Assuming admin data is stored in a path like this
+      const adminRef = dataRef.ref("admin").child(username);
       const snapshot = await adminRef.once("value");
       const adminData = snapshot.val();
 
       if (adminData && adminData.password === password) {
-        setAdminAuthenticated(true); // Login successful
+        setAdminAuthenticated(true); // Successful login
       } else {
         setError("Invalid admin credentials. Please try again.");
       }
     } catch (err) {
       setError("An error occurred while trying to log in. Please try again later.");
-    }
-  };
-
-  const fetchAssignments = async (department) => {
-    try {
-      const assignmentsRef = dataRef.ref(`assignments/${department}`);
-      const snapshot = await assignmentsRef.once("value");
-      const data = snapshot.val();
-      setAssignments(data ? Object.keys(data).map((key) => ({ id: key, ...data[key] })) : []);
-    } catch (err) {
-      setError("Failed to fetch assignments.");
-    }
-  };
-
-  useEffect(() => {
-    if (adminAuthenticated && assignment.department) {
-      fetchAssignments(assignment.department);
-    }
-  }, [adminAuthenticated, assignment.department]);
-
-  const handleAssignmentChange = (e) => {
-    const { name, value } = e.target;
-    setAssignment({
-      ...assignment,
-      [name]: value,
-    });
-  };
-
-  const handleAssignmentSubmit = async (e) => {
-    e.preventDefault();
-    const currentDate = new Date();
-    const selectedDate = new Date(assignment.dueDate);
-
-    if (selectedDate < currentDate) {
-      setError("Due date cannot be in the past.");
-      return;
-    }
-
-    try {
-      const assignmentsRef = dataRef.ref(`assignments/${assignment.department}`).push();
-      await assignmentsRef.set({
-        title: assignment.title,
-        dueDate: assignment.dueDate,
-        format: assignment.format,
-      });
-
-      setAssignment({
-        department: "",
-        title: "",
-        dueDate: "",
-        format: "online",
-      });
-
-      fetchAssignments(assignment.department); // Refresh assignments after submission
-    } catch (err) {
-      setError("Failed to create assignment.");
-    }
-  };
-
-  const handleDeleteAssignment = async (assignmentId, department) => {
-    try {
-      await dataRef.ref(`assignments/${department}/${assignmentId}`).remove();
-      fetchAssignments(department); // Refresh the list after deletion
-    } catch (err) {
-      setError("Failed to delete assignment.");
     }
   };
 
@@ -135,8 +70,8 @@ const AdminAssignments = () => {
             <TextField
               label="Password"
               type="password"
-              value={password}
               required
+              value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
             <Button type="submit" variant="contained" color="primary">
@@ -147,6 +82,66 @@ const AdminAssignments = () => {
       </Box>
     );
   }
+
+  const fetchAssignments = async (department) => {
+    try {
+      const assignmentsRef = dataRef.ref(`assignments/${department}`);
+      const snapshot = await assignmentsRef.once("value");
+      const data = snapshot.val();
+      setAssignments(data ? Object.keys(data).map((key) => ({ id: key, ...data[key] })) : []);
+    } catch (err) {
+      setError("Failed to fetch assignments.");
+    }
+  };
+
+  const handleAssignmentChange = (e) => {
+    const { name, value } = e.target;
+    setAssignment({
+      ...assignment,
+      [name]: value,
+    });
+  };
+
+  const handleAssignmentSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+
+    const currentDate = new Date();
+    const selectedDate = new Date(assignment.dueDate);
+
+    if (selectedDate < currentDate) {
+      setError("Due date cannot be in the past.");
+      return;
+    }
+
+    try {
+      const assignmentsRef = dataRef.ref(`assignments/${assignment.department}`).push();
+      await assignmentsRef.set({
+        title: assignment.title,
+        dueDate: assignment.dueDate,
+        format: assignment.format,
+      });
+
+      fetchAssignments(assignment.department); // Refresh assignments after submission
+      setAssignment({
+        department: "",
+        title: "",
+        dueDate: "",
+        format: "online",
+      });
+    } catch (err) {
+      setError("Failed to create assignment.");
+    }
+  };
+
+  const handleDeleteAssignment = async (assignmentId, department) => {
+    try {
+      await dataRef.ref(`assignments/${department}/${assignmentId}`).remove();
+      fetchAssignments(department); // Refresh the list after deletion
+    } catch (err) {
+      setError("Failed to delete assignment.");
+    }
+  };
 
   return (
     <Box sx={{ maxWidth: 400, mx: "auto", mt: 4 }}>
@@ -159,8 +154,8 @@ const AdminAssignments = () => {
           <Select
             name="department"
             value={assignment.department}
-            onChange={handleAssignmentChange}
             required
+            onChange={handleAssignmentChange}
             displayEmpty
           >
             <MenuItem value="" disabled>
@@ -173,22 +168,22 @@ const AdminAssignments = () => {
           <TextField
             label="Assignment Title"
             name="title"
-            value={assignment.title}
             required
+            value={assignment.title}
             onChange={handleAssignmentChange}
           />
           <TextField
             label="Due Date"
             type="date"
+            required
             name="dueDate"
             value={assignment.dueDate}
-            required
             onChange={handleAssignmentChange}
           />
           <Select
             name="format"
-            value={assignment.format}
             required
+            value={assignment.format}
             onChange={handleAssignmentChange}
           >
             <MenuItem value="online">Online</MenuItem>
