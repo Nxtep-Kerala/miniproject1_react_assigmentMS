@@ -1,35 +1,71 @@
+// Register.js
+
 import React, { useState } from 'react';
-import { registerUser } from '../AuthService';
 
 const Register = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
-  const [department, setDepartment] = useState('');
-  const [year, setYear] = useState('');
-  const [profilePic, setProfilePic] = useState('');
+  const [formData, setFormData] = useState({
+    applicationNumber: '',
+    password: '',
+    phoneNumber: ''
+  });
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const response = await registerUser(email, password, name, department, year, profilePic);
-    if (response.success) {
-      alert('Registration successful!');
-    } else {
-      alert(`Registration failed: ${response.message}`);
-    }
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Here you can implement your form submission logic
+    console.log(formData); // For example, you can log the form data
+    // Reset the form after submission
+    setFormData({
+      applicationNumber: '',
+      password: '',
+      phoneNumber: ''
+    });
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h1>Register</h1>
-      <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Name" required />
-      <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
-      <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required />
-      <input type="text" value={department} onChange={(e) => setDepartment(e.target.value)} placeholder="Department" required />
-      <input type="number" value={year} onChange={(e) => setYear(e.target.value)} placeholder="Year" required />
-      <input type="text" value={profilePic} onChange={(e) => setProfilePic(e.target.value)} placeholder="Profile Picture URL" />
-      <button type="submit">Register</button>
-    </form>
+    <div>
+      <h2>Register</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="applicationNumber">Application Number:</label>
+          <input
+            type="text"
+            id="applicationNumber"
+            name="applicationNumber"
+            value={formData.applicationNumber}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label htmlFor="password">Password:</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label htmlFor="phoneNumber">Phone Number:</label>
+          <input
+            type="text"
+            id="phoneNumber"
+            name="phoneNumber"
+            value={formData.phoneNumber}
+            onChange={handleChange}
+          />
+        </div>
+        <button type="submit">Register</button>
+      </form>
+    </div>
   );
 };
 
