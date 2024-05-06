@@ -1,48 +1,65 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { TextField, Button, Typography, Alert, Box, Stack } from "@mui/material";
 import { dataRef } from "../firebase-config";
-//import { loginUser } from '../AuthService.jss';
 
 const LoginForm = () => {
   const [applicationNumber, setApplicationNumber] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setError(null); // Reset error state
+
     const registrationsRef = dataRef.ref("registrations").child(applicationNumber);
 
-    registrationsRef.once("value", (snapshot) => {
+    try {
+      const snapshot = await registrationsRef.once("value");
       const userData = snapshot.val();
+
       if (userData) {
         if (userData.password === password) {
-          alert("Login successful!");
+          navigate(`/assignments/${userData.department}`);
         } else {
-          alert("Incorrect password!");
+          setError("Incorrect password. Please try again.");
         }
       } else {
-        alert("Application number not found!");
+        setError("Application number not found.");
       }
-    });
+    } catch (err) {
+      setError("An error occurred while trying to log in. Please try again later.");
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h1>Login</h1>
-      <input
-        type="number"
-        value={applicationNumber}
-        onChange={(e) => setApplicationNumber(e.target.value)}
-        placeholder="Application number"
-        required
-      />
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-        required
-      />
-      <button type="submit">Login</button>
-    </form>
+    <Box sx={{ maxWidth: 400, mx: "auto", mt: 4 }}>
+      <Typography variant="h4" component="h1" gutterBottom>
+        Login
+      </Typography>
+      {error && <Alert severity="error">{error}</Alert>}
+      <form onSubmit={handleSubmit}>
+        <Stack spacing={2}>
+          <TextField
+            label="Application Number"
+            value={applicationNumber}
+            onChange={(e) => setApplicationNumber(e.target.value)}
+            required
+          />
+          <TextField
+            label="Password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <Button type="submit" variant="contained" color="primary">
+            Login
+          </Button>
+        </Stack>
+      </form>
+    </Box>
   );
 };
 

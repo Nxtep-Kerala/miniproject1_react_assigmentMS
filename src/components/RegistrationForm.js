@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { Box, TextField, Button, Typography, Stack, Alert } from "@mui/material";
 import { dataRef } from "../firebase-config";
 
 const Register = () => {
@@ -9,6 +11,9 @@ const Register = () => {
     department: "",
   });
 
+  const [error, setError] = useState(null);
+  const navigate = useNavigate(); // For navigation to other routes
+
   useEffect(() => {
     const registrationsRef = dataRef.ref("registrations");
     registrationsRef.once("value", (snapshot) => {
@@ -17,10 +22,10 @@ const Register = () => {
       const applicationNumber = `2024${formattedCount}`;
       setFormData((prevFormData) => ({
         ...prevFormData,
-        applicationNumber: applicationNumber,
+        applicationNumber,
       }));
     });
-  }, [formData.applicationNumber]);
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,76 +35,71 @@ const Register = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const registrationsRef = dataRef
-      .ref("registrations")
-      .child(formData.applicationNumber);
-    registrationsRef.set(formData);
-    setFormData({
-      applicationNumber: "",
-      password: "",
-      phoneNumber: "",
-      department: "",
-    });
-    alert("Form submitted successfully");
+    try {
+      const registrationsRef = dataRef.ref("registrations").child(formData.applicationNumber);
+      await registrationsRef.set(formData);
+
+      // Navigate to the assignment listing based on department
+      if (formData.department) {
+        navigate(`/assignments/${formData.department}`);
+      } else {
+        throw new Error("Department information is missing");
+      }
+    } catch (err) {
+      setError("Failed to submit form. Please try again.");
+    }
   };
 
   return (
-    <div>
-      <h2>Register</h2>
+    <Box sx={{ maxWidth: 400, mx: "auto", mt: 4 }}>
+      <Typography variant="h4" component="h2" gutterBottom>
+        Register
+      </Typography>
+      {error && <Alert severity="error">{error}</Alert>}
       <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="applicationNumber">Application Number:</label>
-          <input
-            type="text"
-            id="applicationNumber"
-            name="applicationNumber"
+        <Stack spacing={3}>
+          <TextField
+            label="Application Number"
             value={formData.applicationNumber}
-            onChange={handleChange}
             readOnly
           />
-        </div>
-        <div>
-          <label htmlFor="phoneNumber">Phone Number:</label>
-          <input
-            type="text"
-            id="phoneNumber"
+          <TextField
+            label="Phone Number"
             name="phoneNumber"
             value={formData.phoneNumber}
             onChange={handleChange}
             required
           />
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
+          <TextField
+            label="Password"
             type="password"
-            id="password"
             name="password"
             value={formData.password}
-            onChange={handleChange}
             required
+            onChange={handleChange}
           />
-        </div>
-        <div>
-          <label htmlFor="department">Department:</label>
-          <select
-            id="department"
+          <TextField
+            label="Department"
+            select
             name="department"
             value={formData.department}
-            onChange={handleChange}
             required
+            onChange={handleChange}
+            SelectProps={{ native: true }}
           >
             <option value="">Select Department</option>
             <option value="CSE">Computer Science and Engineering</option>
             <option value="BT">Biotechnology</option>
             <option value="EC">Electronics and Communication</option>
-          </select>
-        </div>
-        <button type="submit">Register</button>
+          </TextField>
+          <Button type="submit" variant="contained" color="primary">
+            Register
+          </Button>
+        </Stack>
       </form>
-    </div>
+    </Box>
   );
 };
 
