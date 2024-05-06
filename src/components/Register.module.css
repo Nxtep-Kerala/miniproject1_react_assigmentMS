@@ -1,5 +1,5 @@
-/* Container styles for Login */
-.loginContainer {
+/* Container styles */
+.registerContainer {
     max-width: 400px;
     margin: auto;
     margin-top: 40px;
@@ -8,8 +8,17 @@
     background-color: #f9f9f9;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     text-align: center;
-}
-.inputContainer{
+  }
+  
+  /* Heading styles */
+  .registerHeading {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  /* Form input styles */
+  .registerInput {
     border-radius: 30px;
     border: 1px solid #0056b3;
     background: #fff7f4;
@@ -19,42 +28,23 @@
     max-width: 400px; /* Limit width on larger screens */
     margin-bottom: 10px;
     box-sizing: border-box; /* Ensure padding and border are included in width */
-    padding: 8px 16px; 
-}
-
-/* Heading styles for Login */
-.loginHeading {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-
-/* Form input styles for Login */
-
-
-/* Button styles for Login */
-.loginButton {
+    padding: 8px 16px; /* Adjust padding for better touch interaction */
+  }
+  
+  /* Button styles */
+  .registerButton {
     border-radius: 50px;
     background: #0056b3;
     box-shadow: 0px 4px 4px 0px rgba(79, 22, 2, 0.1);
     height: 40px;
     width: 100%; /* Use full width on small screens */
     max-width: 400px; /* Limit width on larger screens */
-    color: #fff;
-    font-size: 16px;
-    font-weight: bold;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.loginButton:hover {
-    background-color: #003f84;
-}
-
-/* Error message styles for Login */
-.errorMessage {
+  }
+  
+  /* Error message styles */
+  .errorMessage {
     color: #0056b3;
     margin-top: 10px;
     text-align: center;
-}
+  }
+  

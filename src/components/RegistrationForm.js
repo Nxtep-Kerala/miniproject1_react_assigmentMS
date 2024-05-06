@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, TextField, Button, Typography, Stack, Alert } from "@mui/material";
 import { dataRef } from "../firebase-config";
+import styles from "./Register.module.css";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -53,53 +53,64 @@ const Register = () => {
   };
 
   return (
-    <Box sx={{ maxWidth: 400, mx: "auto", mt: 4 }}>
-      <Typography variant="h4" component="h2" gutterBottom>
-        Register
-      </Typography>
-      {error && <Alert severity="error">{error}</Alert>}
+    <div className={styles.registerContainer}>
+      <h4 className={styles.registerHeading}>Register</h4>
+      {error && <div className={`${styles.errorMessage} ${styles.alert}`}>{error}</div>}
       <form onSubmit={handleSubmit}>
-        <Stack spacing={3}>
-          <TextField
-            label="Application Number"
+        <div className={styles.inputContainer}>
+          <input
+            placeholder="Application Number"
+            type="text"
             value={formData.applicationNumber}
             readOnly
+            className={styles.registerInput}
           />
-          <TextField
-            label="Phone Number"
+        </div>
+        <div className={styles.inputContainer}>
+          {/* <label>Phone Number</label> */}
+          <input
+            type="text"
             name="phoneNumber"
+            placeholder="Phone Number"
             value={formData.phoneNumber}
             onChange={handleChange}
             required
+            className={styles.registerInput}
           />
-          <TextField
-            label="Password"
+        </div>
+        <div className={styles.inputContainer}>
+          {/* <label>Password</label> */}
+          <input
             type="password"
             name="password"
+            placeholder="Password"
             value={formData.password}
             required
             onChange={handleChange}
+            className={styles.registerInput}
           />
-          <TextField
-            label="Department"
-            select
+        </div>
+        <div className={styles.inputContainer}>
+          <select
             name="department"
             value={formData.department}
             required
             onChange={handleChange}
-            SelectProps={{ native: true }}
+            className={styles.registerInput}
           >
-            <option value=""></option>
+            <option value="" disabled hidden>
+      Select Department
+    </option>
             <option value="CSE">Computer Science and Engineering</option>
             <option value="BT">Biotechnology</option>
             <option value="EC">Electronics and Communication</option>
-          </TextField>
-          <Button type="submit" variant="contained" color="primary">
-            Register
-          </Button>
-        </Stack>
+          </select>
+        </div>
+        <button type="submit" className={styles.registerButton}>
+          Register
+        </button>
       </form>
-    </Box>
+    </div>
   );
 };
 

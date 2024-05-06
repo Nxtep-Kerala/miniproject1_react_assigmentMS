@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { TextField, Button, Typography, Alert, Box, Stack } from "@mui/material";
 import { dataRef } from "../firebase-config";
-import './Login.css';
+import "./Login.css";
 
-const LoginForm = ({ setUserRole }) => { 
+const LoginForm = ({ setUserRole }) => {
   const [applicationNumber, setApplicationNumber] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -12,7 +11,7 @@ const LoginForm = ({ setUserRole }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setError(null); 
+    setError(null);
 
     const registrationsRef = dataRef.ref("registrations").child(applicationNumber);
 
@@ -22,7 +21,7 @@ const LoginForm = ({ setUserRole }) => {
 
       if (userData) {
         if (userData.password === password) {
-          setUserRole(userData.role); 
+          setUserRole(userData.role);
           navigate(`/assignments/${userData.department}`);
         } else {
           setError("Incorrect password. Please try again.");
@@ -36,32 +35,31 @@ const LoginForm = ({ setUserRole }) => {
   };
 
   return (
-    <Box sx={{ maxWidth: 400, mx: "auto", mt: 4 }}>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Login
-      </Typography>
-      {error && <Alert severity="error">{error}</Alert>}
+    <div className="loginContainer">
+      <h1>Login</h1>
+      {error && <div className="errorMessage">{error}</div>}
       <form onSubmit={handleSubmit}>
-        <Stack spacing={2}>
-          <TextField
-            label="Application Number"
+          <input
+          placeholder="Application Number"
+            type="text"
             value={applicationNumber}
+            className="inputContainer"
             onChange={(e) => setApplicationNumber(e.target.value)}
             required
-          />
-          <TextField
-            label="Password"
+          />    
+          <input
+            placeholder="Password"
             type="password"
             value={password}
+            className="inputContainer"
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <Button type="submit" variant="contained" color="primary">
-            Login
-          </Button>
-        </Stack>
+        <button type="submit" className="loginButton">
+          Login
+        </button>
       </form>
-    </Box>
+    </div>
   );
 };
 
