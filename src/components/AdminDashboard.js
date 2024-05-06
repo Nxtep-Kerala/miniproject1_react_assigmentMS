@@ -7,14 +7,12 @@ const AdminDashboard = () => {
   const [newAdmin, setNewAdmin] = useState({ username: '', password: '', department: '' });
   const [admins, setAdmins] = useState([]);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchAdmins();
   }, []);
 
   const fetchAdmins = async () => {
-    setLoading(true);
     try {
       const snapshot = await dataRef.ref('admin').once('value');
       const data = snapshot.val() || {};
@@ -22,7 +20,6 @@ const AdminDashboard = () => {
     } catch (err) {
       setError('Failed to fetch admins.');
     }
-    setLoading(false);
   };
 
   const handleInputChange = (e) => {

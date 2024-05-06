@@ -15,9 +15,7 @@ function App() {
     return userRole !== null;
   };
 
-  const isAdmin = () => {
-    return userRole === "admin";
-  };
+  
 
   return (
     <Router>
@@ -31,7 +29,7 @@ function App() {
         
         <Route
           path="/create-assignment"
-          element={ <AdminAssignments /> }
+          element= {<AdminAssignments />}
         />
         <Route path="/" element={<h1>Welcome to the Assignment Reminder App</h1>} />
         <Route path="*" element={<h1>404 Not Found</h1>} />
