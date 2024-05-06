@@ -128,7 +128,7 @@ const AdminAssignments = () => {
     return (
       <Box sx={{ maxWidth: 400, mx: "auto", mt: 4 }}>
         <Typography variant="h4" gutterBottom>
-          Admin Login
+          Teacher Login
         </Typography>
         {error && <Alert severity="error">{error}</Alert>}
         <form onSubmit={handleLogin}>

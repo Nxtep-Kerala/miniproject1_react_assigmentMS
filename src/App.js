@@ -5,6 +5,7 @@ import RegistrationForm from "./components/RegistrationForm";
 import Assignments from "./components/Assignments";
 import AdminAssignments from "./components/AdminAssignments.js";
 import AdminDashboard from "./components/AdminDashboard.js";
+import Home from "./components/Home.js";
 
 function App() {
   // State to store user role after authentication
@@ -20,6 +21,7 @@ function App() {
   return (
     <Router>
       <Routes>
+      <Route path="/" element={<Home />} />
         <Route path="/login" element={<LoginForm setUserRole={setUserRole} />} />
         <Route path="/register" element={<RegistrationForm />} />
         <Route
