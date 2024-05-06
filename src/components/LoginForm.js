@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { dataRef } from "../firebase-config";
+import { Home } from "@mui/icons-material";
 import "./Login.css";
 
 const LoginForm = ({ setUserRole }) => {
@@ -36,25 +37,30 @@ const LoginForm = ({ setUserRole }) => {
 
   return (
     <div className="loginContainer">
+      <div className="homeButtonContainer">
+        <Link to="/" className="homeButton">
+          <Home />
+        </Link>
+      </div>
       <h1>Login</h1>
       {error && <div className="errorMessage">{error}</div>}
       <form onSubmit={handleSubmit}>
-          <input
+        <input
           placeholder="Application Number"
-            type="text"
-            value={applicationNumber}
-            className="inputContainer"
-            onChange={(e) => setApplicationNumber(e.target.value)}
-            required
-          />    
-          <input
-            placeholder="Password"
-            type="password"
-            value={password}
-            className="inputContainer"
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          type="text"
+          value={applicationNumber}
+          className="inputContainer"
+          onChange={(e) => setApplicationNumber(e.target.value)}
+          required
+        />
+        <input
+          placeholder="Password"
+          type="password"
+          value={password}
+          className="inputContainer"
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
         <button type="submit" className="loginButton">
           Login
         </button>

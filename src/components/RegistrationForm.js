@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { dataRef } from "../firebase-config";
+import { Home } from "@mui/icons-material";
 import styles from "./Register.module.css";
 
 const Register = () => {
@@ -54,6 +55,11 @@ const Register = () => {
 
   return (
     <div className={styles.registerContainer}>
+      <div className={styles.homeButtonContainer}>
+        <Link to="/" className={styles.homeButton}>
+          <Home />
+        </Link>
+      </div>
       <h4 className={styles.registerHeading}>Register</h4>
       {error && <div className={`${styles.errorMessage} ${styles.alert}`}>{error}</div>}
       <form onSubmit={handleSubmit}>
@@ -67,7 +73,6 @@ const Register = () => {
           />
         </div>
         <div className={styles.inputContainer}>
-          {/* <label>Phone Number</label> */}
           <input
             type="text"
             name="phoneNumber"
@@ -79,7 +84,6 @@ const Register = () => {
           />
         </div>
         <div className={styles.inputContainer}>
-          {/* <label>Password</label> */}
           <input
             type="password"
             name="password"
@@ -99,8 +103,8 @@ const Register = () => {
             className={styles.registerInput}
           >
             <option value="" disabled hidden>
-      Select Department
-    </option>
+              Select Department
+            </option>
             <option value="CSE">Computer Science and Engineering</option>
             <option value="BT">Biotechnology</option>
             <option value="EC">Electronics and Communication</option>

@@ -93,7 +93,7 @@ const Assignments = () => {
 
   return (
     <Box className="assignments-container">
-      <Button variant="contained" color="primary" onClick={handleLogout}>
+      <Button variant="contained" color="primary" onClick={handleLogout} className="Logout">
         Logout
       </Button>
       <div className="container">
