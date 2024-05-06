@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { dataRef } from "../firebase-config";
 import { Box, Card, CardContent, Typography, List, ListItem, CircularProgress, Alert, Button} from "@mui/material";
-import "./Assignments.css"; // Import CSS file
+import "./Assignments.css"; 
 
 const Assignments = () => {
   const { department } = useParams();

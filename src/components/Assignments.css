@@ -1,35 +1,57 @@
 .assignments-container {
-    max-width: 800px;
-    margin: auto;
-    margin-top: 40px;
-  }
-  
-  .assignment-card {
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-  }
-  
-  .assignment-title {
-    font-size: 24px;
-    font-weight: bold;
-  }
-  
-  .assignment-details {
-    margin-top: 10px;
-  }
-  
-  .assignment-due {
-    color: #666;
-  }
-  
-  .timetable-list {
-    margin-top: 40px;
-    padding: 0;
-  }
-  
-  .timetable-item {
-    padding: 10px 0;
-    border-bottom: 1px solid #ddd;
-  }
-  
+  background-color: #f4f7fc;
+  padding: 20px;
+}
+
+.assignment-card {
+  background-color: #e8f0fe;
+  margin-bottom: 10px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.assignment-title {
+  color: #0056b3;
+}
+
+.assignment-details {
+  color: #007bff;
+}
+
+.assignment-due {
+  color: #343a40;
+}
+
+.button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
+.typography-h4 {
+  color: #343a40;
+}
+
+.timetable-list {
+  color: #0056b3;
+}
+
+.timetable-item {
+  background-color: #ffffff;
+  border-bottom: 1px solid #007bff;
+}
+
+.logout-button {
+  background-color: #dc3545;
+  color: white;
+}
+
+.logout-button:hover {
+  background-color: #c82333;
+}
