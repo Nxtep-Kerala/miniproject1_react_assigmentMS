@@ -1,21 +1,18 @@
 
-// Import the functions you need from the SDKs you need
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/database';
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyAnKDz-P5d7YoOWjGJkf-ZwG7CPBb0JUnI",
+  authDomain: "miniproject-44c41.firebaseapp.com",
+  databaseURL: "https://miniproject-44c41-default-rtdb.firebaseio.com",
+  projectId: "miniproject-44c41",
+  storageBucket: "miniproject-44c41.appspot.com",
+  messagingSenderId: "18195475421",
+  appId: "1:18195475421:web:38c1dc9ac6481807dd6434",
+  measurementId: "G-ZLP8HMQ0Z6"
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const firestore = getFirestore(app);
-
-export { auth, firestore };
+firebase.initializeApp(firebaseConfig);
+export const dataRef = firebase.database();
+export default firebase;

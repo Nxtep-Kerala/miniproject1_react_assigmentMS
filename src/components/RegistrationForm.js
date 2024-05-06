@@ -1,32 +1,48 @@
-// Register.js
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
+import { dataRef } from "../firebase-config";
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    applicationNumber: '',
-    password: '',
-    phoneNumber: ''
+    applicationNumber: "",
+    password: "",
+    phoneNumber: "",
+    department: "",
   });
+
+  useEffect(() => {
+    const registrationsRef = dataRef.ref("registrations");
+    registrationsRef.once("value", (snapshot) => {
+      const count = snapshot.numChildren();
+      const formattedCount = String(count + 1).padStart(3, "0");
+      const applicationNumber = `2024${formattedCount}`;
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        applicationNumber: applicationNumber,
+      }));
+    });
+  }, [formData.applicationNumber]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Here you can implement your form submission logic
-    console.log(formData); // For example, you can log the form data
-    // Reset the form after submission
+    const registrationsRef = dataRef
+      .ref("registrations")
+      .child(formData.applicationNumber);
+    registrationsRef.set(formData);
     setFormData({
-      applicationNumber: '',
-      password: '',
-      phoneNumber: ''
+      applicationNumber: "",
+      password: "",
+      phoneNumber: "",
+      department: "",
     });
+    alert("Form submitted successfully");
   };
 
   return (
@@ -41,16 +57,7 @@ const Register = () => {
             name="applicationNumber"
             value={formData.applicationNumber}
             onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
+            readOnly
           />
         </div>
         <div>
@@ -61,7 +68,34 @@ const Register = () => {
             name="phoneNumber"
             value={formData.phoneNumber}
             onChange={handleChange}
+            required
           />
+        </div>
+        <div>
+          <label htmlFor="password">Password:</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="department">Department:</label>
+          <select
+            id="department"
+            name="department"
+            value={formData.department}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select Department</option>
+            <option value="CSE">Computer Science and Engineering</option>
+            <option value="BT">Biotechnology</option>
+            <option value="EC">Electronics and Communication</option>
+          </select>
         </div>
         <button type="submit">Register</button>
       </form>
