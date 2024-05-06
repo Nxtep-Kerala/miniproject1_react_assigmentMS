@@ -1,3 +1,30 @@
+.container {
+    display: flex;
+    align-items: center;
+    margin-top: 2%;
+    margin-bottom: 2%;
+  }
+.rectangle-4,
+.rectangle-4 * {
+  box-sizing: border-box;
+}
+.rectangle-4 {
+  background: #0056b3;
+  border-radius: 20px;
+  width: 7px;
+  height: 50px;
+  position: relative;
+}
+
+.heading{
+    color: #0056b3;
+   font-family: Inter;
+font-size: 48px;
+font-style: normal;
+font-weight: 800;
+line-height: normal;
+padding-left: 1%;
+}
 .assignments-container {
   background-color: #f4f7fc;
   padding: 20px;

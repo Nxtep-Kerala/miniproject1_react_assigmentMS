@@ -96,15 +96,24 @@ const Assignments = () => {
       <Button variant="contained" color="primary" onClick={handleLogout}>
         Logout
       </Button>
-      <Typography variant="h4" gutterBottom>
-        Assignments for {department}
-      </Typography>
+      <div className="container">
+      <div className="rectangle-4"></div>
+      <div className="heading">
+        <Typography variant="h4" gutterBottom>
+          Assignments for {department}
+        </Typography>
+      </div>
+    </div>
+      
       {assignments.length > 0 ? (
         assignments.map((assignment, index) => (
-          <Card key={index} className="assignment-card">
+          <Card key={index} className="assignment-card" sx={{ borderRadius: 8 }}>
             <CardContent>
               <Typography variant="h5" className="assignment-title">
                 {assignment.title}
+              </Typography>
+              <Typography variant="body2" className="assignment-details">
+                by: {assignment.createdBy} 
               </Typography>
               <Typography className="assignment-due">Due: {formatDate(assignment.dueDate)}</Typography>
               <Typography variant="body2" className="assignment-details">
@@ -113,6 +122,7 @@ const Assignments = () => {
               <Typography variant="caption" className="assignment-details">
                 {assignment.format.toUpperCase()}
               </Typography>
+              
             </CardContent>
           </Card>
         ))

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { TextField, Button, Typography, Alert, Box, Stack } from "@mui/material";
 import { dataRef } from "../firebase-config";
+import './Login.css';
 
 const LoginForm = ({ setUserRole }) => { 
   const [applicationNumber, setApplicationNumber] = useState("");
