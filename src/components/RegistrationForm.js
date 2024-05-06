@@ -89,7 +89,7 @@ const Register = () => {
             onChange={handleChange}
             SelectProps={{ native: true }}
           >
-            <option value="">Select Department</option>
+            <option value=""></option>
             <option value="CSE">Computer Science and Engineering</option>
             <option value="BT">Biotechnology</option>
             <option value="EC">Electronics and Communication</option>

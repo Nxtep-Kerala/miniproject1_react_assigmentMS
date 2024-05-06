@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { dataRef } from "../firebase-config";
+import { Box, Card, CardContent, Typography, List, ListItem, Divider, CircularProgress, Alert } from "@mui/material";
 
-const Assignments = ({ department }) => {
+const Assignments = () => {
+  const { department } = useParams();
   const [assignments, setAssignments] = useState([]);
   const [timetable, setTimetable] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -30,46 +33,60 @@ const Assignments = ({ department }) => {
       }
     };
 
-    fetchAssignments();
-    fetchTimetable();
-    setLoading(false);
+    const fetchData = async () => {
+      setLoading(true);
+      await fetchAssignments();
+      await fetchTimetable();
+      setLoading(false);
+    };
+
+    fetchData();
   }, [department]);
 
   if (loading) {
-    return <p>Loading data...</p>;
+    return <CircularProgress />;
   }
 
   if (error) {
-    return <p>Error: {error}</p>;
+    return <Alert severity="error">{error}</Alert>;
   }
 
   return (
-    <div>
-      <h1>Assignments for {department}</h1>
+    <Box sx={{ maxWidth: 800, mx: "auto", mt: 4 }}>
+      <Typography variant="h4" gutterBottom>
+        Assignments for {department}
+      </Typography>
       {assignments.length > 0 ? (
-        <ul>
-          {assignments.map((assignment, index) => (
-            <li key={index}>
-              {assignment.title} - Due: {assignment.dueDate}
-            </li>
-          ))}
-        </ul>
+        assignments.map((assignment, index) => (
+          <Card key={index} sx={{ mb: 2 }}>
+            <CardContent>
+              <Typography variant="h5">{assignment.title}</Typography>
+              <Typography color="textSecondary">Due: {assignment.dueDate}</Typography>
+              <Typography variant="body2">{assignment.description}</Typography>
+              <Typography variant="caption">{assignment.format.toUpperCase()}</Typography>
+            </CardContent>
+          </Card>
+        ))
       ) : (
-        <p>No assignments available.</p>
+        <Typography>No assignments available.</Typography>
       )}
-      <h2>Timetable</h2>
+      <Typography variant="h5" sx={{ mt: 4 }}>
+        Timetable
+      </Typography>
       {timetable.length > 0 ? (
-        <ul>
+        <List>
           {timetable.map((subject, index) => (
-            <li key={index}>
-              {subject.day}: {subject.subject}
-            </li>
+            <ListItem key={index} divider>
+              <Typography>
+                {subject.day}: {subject.subject}
+              </Typography>
+            </ListItem>
           ))}
-        </ul>
+        </List>
       ) : (
-        <p>No timetable available.</p>
+        <Typography>No timetable available.</Typography>
       )}
-    </div>
+    </Box>
   );
 };
 
