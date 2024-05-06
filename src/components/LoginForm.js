@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { TextField, Button, Typography, Alert, Box, Stack } from "@mui/material";
 import { dataRef } from "../firebase-config";
 
-const LoginForm = () => {
+const LoginForm = ({ setUserRole }) => { 
   const [applicationNumber, setApplicationNumber] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -11,7 +11,7 @@ const LoginForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setError(null); // Reset error state
+    setError(null); 
 
     const registrationsRef = dataRef.ref("registrations").child(applicationNumber);
 
@@ -21,6 +21,7 @@ const LoginForm = () => {
 
       if (userData) {
         if (userData.password === password) {
+          setUserRole(userData.role); 
           navigate(`/assignments/${userData.department}`);
         } else {
           setError("Incorrect password. Please try again.");
