@@ -55,65 +55,70 @@ const Register = () => {
 
   return (
     <div className={styles.registerContainer}>
-      <div className={styles.homeButtonContainer}>
-        <Link to="/" className={styles.homeButton}>
-          <Home />
-        </Link>
+      <div className={styles.leftPanel}>
+  <h1 className={styles.Header1}>
+    <span>WORK</span> <br />
+    <span>TRACKING</span> <br />
+    <span>MADE</span> <br />
+    <span>EASY</span><br />
+    <span className={styles.light}>No more dues</span>
+  </h1>
+</div>
+      <div className={styles.rightPanel}>
+        <div className={styles.ripcone1}>
+        <div className={styles.homeButtonContainer}>
+          <Link to="/" className={styles.homeButton}>
+            <Home />
+          </Link>
+        </div>
+        <h1 className={styles.registerHeading}>Register</h1>
+        {error && <div className={`${styles.errorMessage} ${styles.alert}`}>{error}</div>}
+        <form className={styles.formreg} onSubmit={handleSubmit}>
+            <input
+              placeholder="Application Number"
+              type="text"
+              value={formData.applicationNumber}
+              readOnly
+              className={styles.inputContainer}
+            />
+            <input
+              type="text"
+              name="phoneNumber"
+              placeholder="Phone Number"
+              value={formData.phoneNumber}
+              onChange={handleChange}
+              required
+              className={styles.inputContainer}
+            />
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              required
+              onChange={handleChange}
+              className={styles.inputContainer}
+            />
+            <select
+              name="department"
+              value={formData.department}
+              required
+              onChange={handleChange}
+              className={styles.inputContainer}
+            >
+              <option value="" disabled hidden>
+                Select Department
+              </option>
+              <option value="CSE">Computer Science and Engineering</option>
+              <option value="BT">Biotechnology</option>
+              <option value="EC">Electronics and Communication</option>
+            </select>
+          <button type="submit" className={styles.registerButton}>
+            Register
+          </button>
+        </form>
       </div>
-      <h4 className={styles.registerHeading}>Register</h4>
-      {error && <div className={`${styles.errorMessage} ${styles.alert}`}>{error}</div>}
-      <form onSubmit={handleSubmit}>
-        <div className={styles.inputContainer}>
-          <input
-            placeholder="Application Number"
-            type="text"
-            value={formData.applicationNumber}
-            readOnly
-            className={styles.registerInput}
-          />
-        </div>
-        <div className={styles.inputContainer}>
-          <input
-            type="text"
-            name="phoneNumber"
-            placeholder="Phone Number"
-            value={formData.phoneNumber}
-            onChange={handleChange}
-            required
-            className={styles.registerInput}
-          />
-        </div>
-        <div className={styles.inputContainer}>
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            required
-            onChange={handleChange}
-            className={styles.registerInput}
-          />
-        </div>
-        <div className={styles.inputContainer}>
-          <select
-            name="department"
-            value={formData.department}
-            required
-            onChange={handleChange}
-            className={styles.registerInput}
-          >
-            <option value="" disabled hidden>
-              Select Department
-            </option>
-            <option value="CSE">Computer Science and Engineering</option>
-            <option value="BT">Biotechnology</option>
-            <option value="EC">Electronics and Communication</option>
-          </select>
-        </div>
-        <button type="submit" className={styles.registerButton}>
-          Register
-        </button>
-      </form>
+      </div>
     </div>
   );
 };

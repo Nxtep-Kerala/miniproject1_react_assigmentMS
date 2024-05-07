@@ -88,7 +88,7 @@ const Assignments = () => {
       <div className="rectangle-4"></div>
       <div className="heading">
         <Typography variant="h4" gutterBottom>
-          Assignments for {department}
+          Timetable for {department}
         </Typography>
       </div>
     </div>

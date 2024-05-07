@@ -37,34 +37,43 @@ const LoginForm = ({ setUserRole }) => {
 
   return (
     <div className="loginContainer">
-      <div className="homeButtonContainer">
-        <Link to="/" className="homeButton">
-          <Home />
-        </Link>
+      <div className="leftPanel">
+        <h1 className="Header1">
+          <span>WORK</span> <span>TRACKING</span> <span>MADE</span> <span>EASY</span><span className="light">No more dues</span>
+        </h1>
       </div>
-      <h1>Login</h1>
-      {error && <div className="errorMessage">{error}</div>}
-      <form onSubmit={handleSubmit}>
-        <input
-          placeholder="Application Number"
-          type="text"
-          value={applicationNumber}
-          className="inputContainer"
-          onChange={(e) => setApplicationNumber(e.target.value)}
-          required
-        />
-        <input
-          placeholder="Password"
-          type="password"
-          value={password}
-          className="inputContainer"
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit" className="loginButton">
-          Login
-        </button>
-      </form>
+      <div className="rightPanel">
+        <div className="ripcone">
+        <div className="homeButtonContainer">
+          <Link to="/" className="homeButton">
+            <Home />
+          </Link>
+        </div>
+        <h1 >Login</h1>
+        {error && <div className="errorMessage">{error}</div>}
+        <form onSubmit={handleSubmit}>
+          <input
+            placeholder="Application Number"
+            type="text"
+            value={applicationNumber}
+            className="inputContainer"
+            onChange={(e) => setApplicationNumber(e.target.value)}
+            required
+          />
+          <input
+            placeholder="Password"
+            type="password"
+            value={password}
+            className="inputContainer"
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button type="submit" className="loginButton">
+            Login
+          </button>
+        </form>
+      </div>
+      </div>
     </div>
   );
 };
