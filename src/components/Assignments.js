@@ -108,13 +108,13 @@ const Assignments = ({ route }) => {
   let courseDetails = "";
   switch (department) {
     case "CSE":
-      courseDetails = "Computer Science and Engineering course details here...";
+      courseDetails = "Computer Engineering students learn how to develop, prototype, and test microchips, circuits, processors, conductors and any other component used in computer devices or systems (e.g. supercomputers, smartphones, laptops, servers, loT gadgets). They also develop firmware, an essential type of software that allows operating systems and applications to take full advantage of the hardware. In addition to general Computer Engineering degrees, universities and colleges also offer different specialisations or subdisciplines if you want to narrow down your focus. Here are a few examples: Hardware Systems, Distributed Computing, Robotics and Cybernetics, Embedded Systems, Computer Graphics and Visualization, Medical Image Computing, Computer and Network Security.    ";
       break;
     case "BT":
       courseDetails = "Biotechnology course details here...";
       break;
     case "EC":
-      courseDetails = "ELECTRONICS AND COMMUNICATION ENGINEERING A degree in Electronics and Communication Engineering enables you with a clear understanding of analog transmission, basic electronics, microprocessors, solid-state devices, digital analog communication, satellite communication, Integrated circuits, antennae and wave progression, and microwave engineering. Basic Electronics Solid State Devices Analaog Electronics Digital Electronics Electromagnetic Theory Signals and Systems Control Systems Microprocessor and Microcontrollers Analog Communications Digital Communications Satellite Communications Power Electronics";
+      courseDetails = "ELECTRONICS AND COMMUNICATION ENGINEERING A degree in Electronics and Communication Engineering enables you with a clear understanding of analog transmission, basic electronics, microprocessors, solid-state devices, digital analog communication, satellite communication, Integrated circuits, antennae and wave progression, and microwave engineering. Basic Electronics, Solid State Devices, Analaog Electronics, Digital Electronics, Electromagnetic Theory, Signals and Systems, Control Systems, Microprocessor and Microcontrollers, Analog Communications, Digital Communications, Satellite Communications, Power Electronics.";
       break;
     default:
       courseDetails = "Course details not available.";
