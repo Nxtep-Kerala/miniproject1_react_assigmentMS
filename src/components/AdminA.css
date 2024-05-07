@@ -1,13 +1,13 @@
-.loginContainer {
+.loginContainer11 {
     display: flex;
     justify-content: center; /* Center content horizontally */
     align-items: center; /* Center content vertically */
     height: 100vh; /* Full viewport height */
   }
-  .ripcone{
+  .ripcone11{
     margin-top: 30%;
   }
-  .inputContainer{
+  .inputContainer11{
     border-radius: 30px;
     border: 1px solid #0056b3;
     text-align: center;
@@ -19,14 +19,7 @@
     padding: 8px 16px; 
 }
 
-.loginHeading {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-  .leftPanel {
+  .leftPanel11 {
     flex: 1; /* Occupy 50% of the container width */
     padding: 20px; /* Add padding around the content */
     background-color: #0056b3; /* Background color for the left panel */
@@ -34,7 +27,7 @@
     display: none;
   }
   
-  .rightPanel {
+  .rightPanel11 {
     flex: 1; /* Occupy 50% of the container width */
     padding: 20px; /* Add padding around the content */ /* Background color for the right panel */
     height: 100%;
@@ -42,7 +35,7 @@
     background-color: white;
   }
   
-  .Header1 {
+  .Header111 {
     padding: 10px; /* Add padding to provide space around the text */
     border-radius: 8px; /* Add border radius for rounded corners */
     margin-top: 35%;
@@ -50,22 +43,22 @@
     color: white;
   }
   
-  .Header1 span {
+  .Header111 span {
     display: block; /* Display each word on a new line */
     margin-bottom: 5px; /* Adjust spacing between words */
     
   }
   
-  .light {
+  .light11 {
     color: lightblue;; /* Example color for the 'No more dues' text */
   }
   
-  .homeButtonContainer {
+  .homeButtonContainer11 {
     text-align: center; /* Align home button to the right */
   }
 
   
-  .loginButton {
+  .loginButton11 {
     border-radius: 50px;
     background: #0056b3;
     box-shadow: 0px 4px 4px 0px rgba(79, 22, 2, 0.1);
@@ -80,22 +73,22 @@
     transition: background-color 0.3s ease;
 }
   
-  .loginButton:hover {
+  .loginButton11:hover {
     background-color: #0056b3;
   }
   @media (max-width: 600px) {
-    .leftPanel {
+    .leftPanel11 {
       display: none; /* Hide the left panel on small screens */
     }
   
-    .rightPanel {
+    .rightPanel11 {
       padding-top: 10%; /* Adjust top padding to center the form */
       background-color: #f0f0f0;
       height: 100%;
       text-align: center;
     }
   
-    .Header1 {
+    .Header111 {
       margin-top: 10%; /* Adjust margin top for the header */
       margin-left: 0;
       text-align: center;

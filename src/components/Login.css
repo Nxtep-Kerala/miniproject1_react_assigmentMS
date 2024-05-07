@@ -63,6 +63,9 @@
   .homeButtonContainer {
     text-align: center; /* Align home button to the right */
   }
+  .homeButton{
+    color:black
+  }
 
   
   .loginButton {
@@ -84,21 +87,21 @@
     background-color: #0056b3;
   }
   @media (max-width: 600px) {
-    .leftPanel {
-      display: none; /* Hide the left panel on small screens */
-    }
-  
-    .rightPanel {
-      padding-top: 10%; /* Adjust top padding to center the form */
-      background-color: #f0f0f0;
-      height: 100%;
-      text-align: center;
-    }
-  
-    .Header1 {
-      margin-top: 10%; /* Adjust margin top for the header */
-      margin-left: 0;
-      text-align: center;
-    }
+  .leftPanel {
+    display: none; /* Hide the left panel on small screens */
   }
+
+  .rightPanel {
+    padding-top: 10%; /* Adjust top padding to center the form */
+    background-color: #f0f0f0;
+    height: 100%;
+    text-align: center;
+  }
+
+  .Header1 {
+    margin-top: 10%; /* Adjust margin top for the header */
+    margin-left: 0;
+    text-align: center;
+  }
+}
   

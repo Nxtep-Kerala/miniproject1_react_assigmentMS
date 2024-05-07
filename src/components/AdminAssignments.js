@@ -254,15 +254,15 @@ const AdminAssignments = () => {
           </Box>
         </>
       ) : (
-        <div className="loginContainer">
-        <div className="leftPanel">
-          <h1 className="Header1">
-            <span>WORK</span> <span>TRACKING</span> <span>MADE</span> <span>EASY</span><span className="light">No more dues</span>
+        <div className="loginContainer11">
+        <div className="leftPanel11">
+          <h1 className="Header111">
+            <span>WORK</span> <span>TRACKING</span> <span>MADE</span> <span>EASY</span><span className="light11">No more dues</span>
           </h1>
         </div>
-        <div className="rightPanel">
-          <div className="ripcone">
-          <div className="homeButtonContainer">
+        <div className="rightPanel11">
+          <div className="ripcone11">
+          <div className="homeButtonContainer11">
             <Link to="/" className="homeButton">
               <Home />
             </Link>
@@ -275,7 +275,7 @@ const AdminAssignments = () => {
                 placeholder="Username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="inputContainer"
+                className="inputContainer11"
                 required
               />
             <input
@@ -283,10 +283,10 @@ const AdminAssignments = () => {
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="inputContainer"
+                className="inputContainer11"
                 required
               />
-            <button type="submit" className="loginButton">
+            <button type="submit" className="loginButton11">
               Login
             </button>
           </form>
