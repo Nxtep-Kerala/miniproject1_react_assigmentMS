@@ -41,9 +41,11 @@ const Assignments = ({ route }) => {
   const { department, username } = useParams();
   const [assignments, setAssignments] = useState([]);
   const [timetable, setTimetable] = useState({});
+  const [userProfile, setUserProfile] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [openModal, setOpenModal] = useState(false); // State for modal visibility
+  const [openProfileModal, setOpenProfileModal] = useState(false);
+  const [openCourseModal, setOpenCourseModal] = useState(false);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -51,49 +53,54 @@ const Assignments = ({ route }) => {
   };
 
   useEffect(() => {
-    const fetchAssignments = async () => {
-      try {
-        const assignmentsRef = dataRef.ref(`assignments/${department}`);
-        const snapshot = await assignmentsRef.once("value");
-        const data = snapshot.val() || {};
-        const sortedAssignments = Object.values(data).sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-        setAssignments(sortedAssignments);
-      } catch (err) {
-        setError("Failed to load assignments.");
-      }
-    };
-
-    const fetchTimetable = async () => {
-      try {
-        const timetableRef = dataRef.ref(`timetables/${department}`);
-        const snapshot = await timetableRef.once("value");
-        const data = snapshot.val() || {};
-        setTimetable(data);
-      } catch (err) {
-        setError("Failed to load timetable.");
-      }
-    };
-
     const fetchData = async () => {
       setLoading(true);
-      await fetchAssignments();
-      await fetchTimetable();
+      try {
+        const userRef = dataRef.ref(`registrations`).orderByChild('username').equalTo(username);
+        const snapshotUser = await userRef.once("value");
+        if (snapshotUser.exists()) {
+          const userDetail = snapshotUser.val();
+          const userKey = Object.keys(userDetail)[0];
+          setUserProfile(userDetail[userKey]);
+        } else {
+          setError("User not found.");
+        }
+
+        const assignmentsRef = dataRef.ref(`assignments/${department}`);
+        const snapshotAssignments = await assignmentsRef.once("value");
+        setAssignments(Object.values(snapshotAssignments.val() || {}).sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate)));
+
+        const timetableRef = dataRef.ref(`timetables/${department}`);
+        const snapshotTimetable = await timetableRef.once("value");
+        setTimetable(snapshotTimetable.val() || {});
+
+      } catch (err) {
+        setError("Failed to load data.");
+      }
       setLoading(false);
     };
 
     fetchData();
-  }, [department]);
+  }, [department, username]);
 
   const handleLogout = () => {
     window.location.href = "/login";
   };
 
+  const handleProfileOpen = () => {
+    setOpenProfileModal(true);
+  };
+
+  const handleProfileClose = () => {
+    setOpenProfileModal(false);
+  };
+
   const handleCourseDetailsOpen = () => {
-    setOpenModal(true);
+    setOpenCourseModal(true);
   };
 
   const handleCourseDetailsClose = () => {
-    setOpenModal(false);
+    setOpenCourseModal(false);
   };
 
   if (loading) {
@@ -104,17 +111,16 @@ const Assignments = ({ route }) => {
     return <Alert severity="error">{error}</Alert>;
   }
 
-  // Course details based on department
   let courseDetails = "";
   switch (department) {
     case "CSE":
-      courseDetails = "Computer Engineering students learn how to develop, prototype, and test microchips, circuits, processors, conductors and any other component used in computer devices or systems (e.g. supercomputers, smartphones, laptops, servers, loT gadgets). They also develop firmware, an essential type of software that allows operating systems and applications to take full advantage of the hardware. In addition to general Computer Engineering degrees, universities and colleges also offer different specialisations or subdisciplines if you want to narrow down your focus. Here are a few examples: Hardware Systems, Distributed Computing, Robotics and Cybernetics, Embedded Systems, Computer Graphics and Visualization, Medical Image Computing, Computer and Network Security.    ";
+      courseDetails = "Computer Engineering students learn how to develop, prototype, and test microchips, circuits, processors, conductors and any other component used in computer devices or systems (e.g. supercomputers, smartphones, laptops, servers, loT gadgets). They also develop firmware, an essential type of software that allows operating systems and applications to take full advantage of the hardware. In addition to general Computer Engineering degrees, universities and colleges also offer different specialisations or subdisciplines if you want to narrow down your focus. Here are a few examples: Hardware Systems, Distributed Computing, Robotics and Cybernetics, Embedded Systems, Computer Graphics and Visualization, Medical Image Computing, Computer and Network Security.";
       break;
     case "BT":
       courseDetails = "Biotechnology course details here...";
       break;
     case "EC":
-      courseDetails = "ELECTRONICS AND COMMUNICATION ENGINEERING A degree in Electronics and Communication Engineering enables you with a clear understanding of analog transmission, basic electronics, microprocessors, solid-state devices, digital analog communication, satellite communication, Integrated circuits, antennae and wave progression, and microwave engineering. Basic Electronics, Solid State Devices, Analaog Electronics, Digital Electronics, Electromagnetic Theory, Signals and Systems, Control Systems, Microprocessor and Microcontrollers, Analog Communications, Digital Communications, Satellite Communications, Power Electronics.";
+      courseDetails = "ELECTRONICS AND COMMUNICATION ENGINEERING A degree in Electronics and Communication Engineering enables you with a clear understanding of analog transmission, basic electronics, microprocessors, solid-state devices, digital analog communication, satellite communication, Integrated circuits, antennae and wave progression, and microwave engineering. Basic Electronics, Solid State Devices, Analog Electronics, Digital Electronics, Electromagnetic Theory, Signals and Systems, Control Systems, Microprocessor and Microcontrollers, Analog Communications, Digital Communications, Satellite Communications, Power Electronics.";
       break;
     default:
       courseDetails = "Course details not available.";
@@ -123,19 +129,69 @@ const Assignments = ({ route }) => {
 
   return (
     <Box className="assignments-container" sx={{ maxWidth: 960, margin: "auto", mt: 4 }}>
-      <Typography variant="h3" className="username-title">
-        {username}
-      </Typography>
-      <Button variant="contained" onClick={handleCourseDetailsOpen} sx={{ mr: 2 }}>
-        Course Details
-      </Button>
-      <Button variant="contained" onClick={handleLogout}>
-        Logout
-      </Button>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+    <Typography variant="h3" className="username-title">
+      {username}
+    </Typography>
+    <Button variant="contained" onClick={handleProfileOpen} sx={{ mr: 2 }}>
+      Profile
+    </Button>
+    <Button variant="contained" onClick={handleCourseDetailsOpen} sx={{ mr: 2 }}>
+      Course Details
+    </Button>
+    <Button variant="contained" onClick={handleLogout}>
+      Logout
+    </Button>
+  </Box>
 
-      {/* Modal for Course Details */}
       <Modal
-        open={openModal}
+        open={openProfileModal}
+        onClose={handleProfileClose}
+        aria-labelledby="profile-details-modal"
+        aria-describedby="profile-details-description"
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500
+        }}
+      >
+        <Fade in={openProfileModal}>
+          <Paper
+            elevation={3}
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: "80%",
+              maxWidth: 600,
+              bgcolor: "white",
+              boxShadow: 24,
+              p: 4
+            }}
+          >
+            <Typography variant="h4" gutterBottom>
+              Profile Details
+            </Typography>
+            <Typography variant="body1" sx={{ lineHeight: 1.6 }}>
+              Username: {userProfile.username || "Not Available"}
+            </Typography>
+            <Typography variant="body1" sx={{ lineHeight: 1.6 }}>
+              Phone Number: {userProfile.phoneNumber || "Not Available"}
+              </Typography>
+
+              <Typography variant="body1" sx={{ lineHeight: 1.6 }}>
+              Department: {userProfile.department || "Not Available"}
+            </Typography>
+            <Button variant="contained" onClick={handleProfileClose} sx={{ mt: 3 }}>
+              Close
+            </Button>
+          </Paper>
+        </Fade>
+      </Modal>
+
+      <Modal
+        open={openCourseModal}
         onClose={handleCourseDetailsClose}
         aria-labelledby="course-details-modal"
         aria-describedby="course-details-modal-description"
@@ -145,7 +201,7 @@ const Assignments = ({ route }) => {
           timeout: 500
         }}
       >
-        <Fade in={openModal}>
+        <Fade in={openCourseModal}>
           <Paper
             elevation={3}
             sx={{
@@ -173,7 +229,6 @@ const Assignments = ({ route }) => {
         </Fade>
       </Modal>
 
-      {/* Timetable Table */}
       <TableContainer component={Paper} sx={{ mt: 4 }}>
         <Table aria-label="simple timetable">
           <TableHead>
@@ -199,7 +254,6 @@ const Assignments = ({ route }) => {
         </Table>
       </TableContainer>
 
-      {/* Assignments Cards */}
       <Box sx={{ mt: 4 }}>
         {assignments.length > 0 ? (
           assignments.map((assignment, index) => (
@@ -231,3 +285,4 @@ const Assignments = ({ route }) => {
 };
 
 export default Assignments;
+
