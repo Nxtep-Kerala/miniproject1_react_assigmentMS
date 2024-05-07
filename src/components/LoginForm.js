@@ -23,7 +23,7 @@ const LoginForm = ({ setUserRole }) => {
       if (userData) {
         if (userData.password === password) {
           setUserRole(userData.role);
-          navigate(`/assignments/${userData.department}`);
+          navigate(`/assignments/${userData.department}/${userData.username}`);
         } else {
           setError("Incorrect password. Please try again.");
         }
@@ -72,7 +72,7 @@ const LoginForm = ({ setUserRole }) => {
             Login
           </button>
           <p className="notUser">
-          Not a user? <Link to="/registration">Sign up</Link>
+          Not a user? <Link to="/register">Sign up</Link>
         </p>
         </form>
       </div>
