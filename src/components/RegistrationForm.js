@@ -7,6 +7,7 @@ import styles from "./Register.module.css";
 const Register = () => {
   const [formData, setFormData] = useState({
     applicationNumber: "",
+    username: "",
     password: "",
     phoneNumber: "",
     department: "",
@@ -79,6 +80,15 @@ const Register = () => {
               type="text"
               value={formData.applicationNumber}
               readOnly
+              className={styles.inputContainer}
+            />
+            <input
+              type="text"
+              name="username"
+              placeholder="Name"
+              value={formData.username}
+              onChange={handleChange}
+              required
               className={styles.inputContainer}
             />
             <input

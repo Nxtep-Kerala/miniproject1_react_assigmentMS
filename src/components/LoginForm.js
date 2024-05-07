@@ -23,7 +23,7 @@ const LoginForm = ({ setUserRole }) => {
       if (userData) {
         if (userData.password === password) {
           setUserRole(userData.role);
-          navigate(`/assignments/${userData.department}`);
+          navigate(`/assignments/${userData.department}/${userData.username}`);
         } else {
           setError("Incorrect password. Please try again.");
         }

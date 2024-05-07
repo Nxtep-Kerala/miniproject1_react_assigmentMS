@@ -25,7 +25,7 @@ function App() {
         <Route path="/login" element={<LoginForm setUserRole={setUserRole} />} />
         <Route path="/register" element={<RegistrationForm />} />
         <Route
-          path="/assignments/:department"
+          path="/assignments/:department/:username"
           element={isAuthenticated() ? <Assignments /> : <Navigate to="/login" />}
         />
         

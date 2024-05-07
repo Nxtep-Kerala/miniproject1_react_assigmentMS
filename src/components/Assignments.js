@@ -9,6 +9,7 @@ import {
 import "./Assignments.css"; 
 
 const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+
 const getProgressValue = (dueDate) => {
   const now = new Date();
   const due = new Date(dueDate);
@@ -20,8 +21,8 @@ const getProgressValue = (dueDate) => {
   return Math.max(0, (passed / total) * 100);
 };
 
-const Assignments = () => {
-  const { department } = useParams();
+const Assignments = ({route}) => {
+  const { department, username } = useParams();
   const [assignments, setAssignments] = useState([]);
   const [timetable, setTimetable] = useState({});
   const [loading, setLoading] = useState(true);
@@ -80,7 +81,8 @@ const Assignments = () => {
 
   return (
     <Box className="assignments-container" sx={{ maxWidth: 960, margin: 'auto', mt: 4 }}>
-      <Button variant="contained" color="primary" onClick={handleLogout}>
+      <Typography variant="h3" className="username-title">{username}</Typography>
+      <Button  className="logout-button" variant="contained"  onClick={handleLogout}>
         Logout
       </Button>
       <div className="container">
