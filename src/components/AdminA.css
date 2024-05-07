@@ -1,0 +1,104 @@
+.loginContainer {
+    display: flex;
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
+    height: 100vh; /* Full viewport height */
+  }
+  .ripcone{
+    margin-top: 30%;
+  }
+  .inputContainer{
+    border-radius: 30px;
+    border: 1px solid #0056b3;
+    text-align: center;
+    height: 40px;
+    width: 100%; /* Use full width on small screens */
+    max-width: 400px; /* Limit width on larger screens */
+    margin-bottom: 10px;
+    box-sizing: border-box; /* Ensure padding and border are included in width */
+    padding: 8px 16px; 
+}
+
+.loginHeading {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+  .leftPanel {
+    flex: 1; /* Occupy 50% of the container width */
+    padding: 20px; /* Add padding around the content */
+    background-color: #0056b3; /* Background color for the left panel */
+    height: 100%;
+    display: none;
+  }
+  
+  .rightPanel {
+    flex: 1; /* Occupy 50% of the container width */
+    padding: 20px; /* Add padding around the content */ /* Background color for the right panel */
+    height: 100%;
+    text-align: center;
+    background-color: white;
+  }
+  
+  .Header1 {
+    padding: 10px; /* Add padding to provide space around the text */
+    border-radius: 8px; /* Add border radius for rounded corners */
+    margin-top: 35%;
+    margin-left: 30%;
+    color: white;
+  }
+  
+  .Header1 span {
+    display: block; /* Display each word on a new line */
+    margin-bottom: 5px; /* Adjust spacing between words */
+    
+  }
+  
+  .light {
+    color: lightblue;; /* Example color for the 'No more dues' text */
+  }
+  
+  .homeButtonContainer {
+    text-align: center; /* Align home button to the right */
+  }
+
+  
+  .loginButton {
+    border-radius: 50px;
+    background: #0056b3;
+    box-shadow: 0px 4px 4px 0px rgba(79, 22, 2, 0.1);
+    height: 40px;
+    width: 100%; /* Use full width on small screens */
+    max-width: 400px; /* Limit width on larger screens */
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+  
+  .loginButton:hover {
+    background-color: #0056b3;
+  }
+  @media (max-width: 600px) {
+    .leftPanel {
+      display: none; /* Hide the left panel on small screens */
+    }
+  
+    .rightPanel {
+      padding-top: 10%; /* Adjust top padding to center the form */
+      background-color: #f0f0f0;
+      height: 100%;
+      text-align: center;
+    }
+  
+    .Header1 {
+      margin-top: 10%; /* Adjust margin top for the header */
+      margin-left: 0;
+      text-align: center;
+    }
+  }
+  

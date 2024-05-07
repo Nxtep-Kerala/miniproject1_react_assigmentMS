@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { dataRef } from "../firebase-config";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import {
   Box, TextField, Button, Typography, Stack, Alert, Select, MenuItem, List, ListItem,
   ListItemText, IconButton, ListItemSecondaryAction,
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import './AdminA.css';
+import { Home } from "@mui/icons-material";
 
 const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
@@ -252,21 +254,45 @@ const AdminAssignments = () => {
           </Box>
         </>
       ) : (
-        <Box sx={{ maxWidth: 400, mx: "auto", mt: 4 }}>
-          <Typography variant="h4" gutterBottom>
-            Teacher Login
-          </Typography>
-          {error && <Alert severity="error">{error}</Alert>}
+        <div className="loginContainer">
+        <div className="leftPanel">
+          <h1 className="Header1">
+            <span>WORK</span> <span>TRACKING</span> <span>MADE</span> <span>EASY</span><span className="light">No more dues</span>
+          </h1>
+        </div>
+        <div className="rightPanel">
+          <div className="ripcone">
+          <div className="homeButtonContainer">
+            <Link to="/" className="homeButton">
+              <Home />
+            </Link>
+          </div>
+          <h1 > Teacher Login</h1>
+          {error && <div className="errorMessage">{error}</div>}
           <form onSubmit={handleLogin}>
-            <Stack spacing={3}>
-              <TextField label="Username" required value={username} onChange={e => setUsername(e.target.value)} />
-              <TextField label="Password" type="password" required value={password} onChange={e => setPassword(e.target.value)} />
-              <Button type="submit" variant="contained" color="primary">
-                Login
-              </Button>
-            </Stack>
+          <input
+                type="text"
+                placeholder="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="inputContainer"
+                required
+              />
+            <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="inputContainer"
+                required
+              />
+            <button type="submit" className="loginButton">
+              Login
+            </button>
           </form>
-        </Box>
+        </div>
+        </div>
+      </div>
       )}
     </Box>
   );
