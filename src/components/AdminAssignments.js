@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { dataRef } from "../firebase-config";
+import { useNavigate } from "react-router-dom";
 import {
   Box, TextField, Button, Typography, Stack, Alert, Select, MenuItem, List, ListItem,
   ListItemText, IconButton, ListItemSecondaryAction,
@@ -25,6 +26,13 @@ const AdminAssignments = () => {
   const [timetables, setTimetables] = useState(
     daysOfWeek.reduce((acc, day) => ({ ...acc, [day]: Array(7).fill({ subject: '' }) }), {})
   );
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if admin is authenticated on component mount
+    const isAuthenticated = localStorage.getItem("adminAuthenticated") === "true";
+    setAdminAuthenticated(isAuthenticated);
+  }, []);
 
   useEffect(() => {
     if (adminAuthenticated && assignment.department) {
@@ -56,6 +64,12 @@ const AdminAssignments = () => {
     } catch (err) {
       setError("An error occurred while trying to log in. Please try again later.");
     }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("adminAuthenticated"); // Remove authentication flag
+    setAdminAuthenticated(false);
+    navigate("/create-assignment"); // Navigate to login page after logout
   };
 
   const fetchTimetable = async (department) => {
@@ -147,109 +161,113 @@ const AdminAssignments = () => {
     }
   };
 
-  if (!adminAuthenticated) {
-    return (
-      <Box sx={{ maxWidth: 400, mx: "auto", mt: 4 }}>
-        <Typography variant="h4" gutterBottom>
-          Teacher Login
-        </Typography>
-        {error && <Alert severity="error">{error}</Alert>}
-        <form onSubmit={handleLogin}>
-          <Stack spacing={3}>
-            <TextField label="Username" required value={username} onChange={e => setUsername(e.target.value)} />
-            <TextField label="Password" type="password" required value={password} onChange={e => setPassword(e.target.value)} />
-            <Button type="submit" variant="contained" color="primary">
-              Login
-            </Button>
-          </Stack>
-        </form>
-      </Box>
-    );
-  }
-
   return (
     <Box sx={{ maxWidth: 800, mx: "auto", mt: 4 }}>
-      <Typography variant="h4" gutterBottom>
-        Manage Assignments and Timetable
-      </Typography>
-      {error && <Alert severity="error">{error}</Alert>}
-      <Typography variant="h5" gutterBottom>Timetable Management</Typography>
-      <TableContainer component={Paper}>
-        <Table aria-label="simple timetable">
-          <TableHead>
-            <TableRow>
-              <TableCell>Day</TableCell>
-              {Array.from({ length: 7 }, (_, i) => <TableCell key={i}>Period {i + 1}</TableCell>)}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {daysOfWeek.map(day => (
-              <TableRow key={day}>
-                <TableCell>{day}</TableCell>
-                {timetables[day].map((period, index) => (
-                  <TableCell key={index}>
-                    <TextField
-                      fullWidth
-                      size="small"
-                      variant="outlined"
-                      value={period.subject}
-                      onChange={(e) => handleTimetableChange(e.target.value, day, index)}
-                    />
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <Button variant="contained" color="primary" sx={{ mt: 2, mb: 2 }} onClick={saveTimetable}>
-        Save Timetable
-      </Button>
-
-      {/* Assignment creation and list */}
-      <Typography variant="h4" gutterBottom>
-        Create Assignment
-      </Typography>
-      <form onSubmit={handleAssignmentSubmit}>
-        <Stack spacing={3}>
-          <Select name="department" disabled required value={assignment.department} onChange={handleAssignmentChange} displayEmpty>
-            <MenuItem value="" disabled>Select Department</MenuItem>
-            <MenuItem value="CSE">Computer Science and Engineering</MenuItem>
-            <MenuItem value="BT">Biotechnology</MenuItem>
-            <MenuItem value="EC">Electronics and Communication</MenuItem>
-          </Select>
-          <TextField label="Assignment Title" required name="title" value={assignment.title} onChange={handleAssignmentChange} />
-          <TextField label="Description" name="description" required value={assignment.description} onChange={handleAssignmentChange} />
-          <TextField type="date" required name="dueDate" value={assignment.dueDate} onChange={handleAssignmentChange} />
-          <Select name="format" required value={assignment.format} onChange={handleAssignmentChange}>
-            <MenuItem value="online">Online</MenuItem>
-            <MenuItem value="offline">Offline</MenuItem>
-          </Select>
-          <Button type="submit" variant="contained" color="primary">
-            Create Assignment
+      {adminAuthenticated ? (
+        <>
+          {/* Logout Button */}
+          <Button variant="contained" color="primary" onClick={handleLogout} sx={{ mb: 2 }}>
+            Logout
           </Button>
-        </Stack>
-      </form>
-
-      <Box sx={{ mt: 4 }}>
-        <Typography variant="h5">Assignments</Typography>
-        {assignments.length > 0 ? (
-          <List>
-            {assignments.map((assignment) => (
-              <ListItem key={assignment.id}>
-                <ListItemText primary={`${assignment.title} - Due: ${formatDate(assignment.dueDate)}`} />
-                <ListItemSecondaryAction>
-                  <IconButton edge="end" color="secondary" onClick={() => handleDeleteAssignment(assignment.id, assignment.department)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </ListItemSecondaryAction>
-              </ListItem>
-            ))}
-          </List>
-        ) : (
-          <Typography>No assignments available.</Typography>
-        )}
-      </Box>
+          {/* Manage Assignments and Timetable */}
+          <Typography variant="h4" gutterBottom>
+            Manage Assignments and Timetable
+          </Typography>
+          {error && <Alert severity="error">{error}</Alert>}
+          {/* Timetable Management */}
+          <Typography variant="h5" gutterBottom>Timetable Management</Typography>
+          <TableContainer component={Paper}>
+            <Table aria-label="simple timetable">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Day</TableCell>
+                  {Array.from({ length: 7 }, (_, i) => <TableCell key={i}>Period {i + 1}</TableCell>)}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {daysOfWeek.map(day => (
+                  <TableRow key={day}>
+                    <TableCell>{day}</TableCell>
+                    {timetables[day].map((period, index) => (
+                      <TableCell key={index}>
+                        <TextField
+                          fullWidth
+                          size="small"
+                          variant="outlined"
+                          value={period.subject}
+                          onChange={(e) => handleTimetableChange(e.target.value, day, index)}
+                        />
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <Button variant="contained" color="primary" sx={{ mt: 2, mb: 2 }} onClick={saveTimetable}>
+            Save Timetable
+          </Button>
+          {/* Assignment creation and list */}
+          <Typography variant="h4" gutterBottom>
+            Create Assignment
+          </Typography>
+          <form onSubmit={handleAssignmentSubmit}>
+            <Stack spacing={3}>
+              <Select name="department" disabled required value={assignment.department} onChange={handleAssignmentChange} displayEmpty>
+                <MenuItem value="" disabled>Select Department</MenuItem>
+                <MenuItem value="CSE">Computer Science and Engineering</MenuItem>
+                <MenuItem value="BT">Biotechnology</MenuItem>
+                <MenuItem value="EC">Electronics and Communication</MenuItem>
+              </Select>
+              <TextField label="Assignment Title" required name="title" value={assignment.title} onChange={handleAssignmentChange} />
+              <TextField label="Description" name="description" required value={assignment.description} onChange={handleAssignmentChange} />
+              <TextField type="date" required name="dueDate" value={assignment.dueDate} onChange={handleAssignmentChange} />
+              <Select name="format" required value={assignment.format} onChange={handleAssignmentChange}>
+                <MenuItem value="online">Online</MenuItem>
+                <MenuItem value="offline">Offline</MenuItem>
+              </Select>
+              <Button type="submit" variant="contained" color="primary">
+                Create Assignment
+              </Button>
+            </Stack>
+          </form>
+          <Box sx={{ mt: 4 }}>
+            <Typography variant="h5">Assignments</Typography>
+            {assignments.length > 0 ? (
+              <List>
+                {assignments.map((assignment) => (
+                  <ListItem key={assignment.id}>
+                    <ListItemText primary={`${assignment.title} - Due: ${formatDate(assignment.dueDate)}`} />
+                    <ListItemSecondaryAction>
+                      <IconButton edge="end" color="secondary" onClick={() => handleDeleteAssignment(assignment.id, assignment.department)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ))}
+              </List>
+            ) : (
+              <Typography>No assignments available.</Typography>
+            )}
+          </Box>
+        </>
+      ) : (
+        <Box sx={{ maxWidth: 400, mx: "auto", mt: 4 }}>
+          <Typography variant="h4" gutterBottom>
+            Teacher Login
+          </Typography>
+          {error && <Alert severity="error">{error}</Alert>}
+          <form onSubmit={handleLogin}>
+            <Stack spacing={3}>
+              <TextField label="Username" required value={username} onChange={e => setUsername(e.target.value)} />
+              <TextField label="Password" type="password" required value={password} onChange={e => setPassword(e.target.value)} />
+              <Button type="submit" variant="contained" color="primary">
+                Login
+              </Button>
+            </Stack>
+          </form>
+        </Box>
+      )}
     </Box>
   );
 };

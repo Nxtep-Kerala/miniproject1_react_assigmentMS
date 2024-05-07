@@ -9,7 +9,6 @@ import {
 import "./Assignments.css"; 
 
 const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
-
 const getProgressValue = (dueDate) => {
   const now = new Date();
   const due = new Date(dueDate);
