@@ -71,6 +71,9 @@ const LoginForm = ({ setUserRole }) => {
           <button type="submit" className="loginButton">
             Login
           </button>
+          <p className="notUser">
+          Not a user? <Link to="/register">Sign up</Link>
+        </p>
         </form>
       </div>
       </div>

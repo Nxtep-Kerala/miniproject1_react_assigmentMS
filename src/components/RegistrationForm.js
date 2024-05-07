@@ -42,10 +42,12 @@ const Register = () => {
     try {
       const registrationsRef = dataRef.ref("registrations").child(formData.applicationNumber);
       await registrationsRef.set(formData);
+      const snapshot = await registrationsRef.once("value");
+      const userData = snapshot.val();
 
       // Navigate to the assignment listing based on department
       if (formData.department) {
-        navigate(`/assignments/${formData.department}`);
+        navigate(`/assignments/${userData.department}/${userData.username}`);
       } else {
         throw new Error("Department information is missing");
       }

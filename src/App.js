@@ -23,7 +23,7 @@ function App() {
       <Routes>
       <Route path="/" element={<Home />} />
         <Route path="/login" element={<LoginForm setUserRole={setUserRole} />} />
-        <Route path="/register" element={<RegistrationForm />} />
+        <Route path="/register" element={<RegistrationForm setUserRole={setUserRole}/>} />
         <Route
           path="/assignments/:department/:username"
           element={isAuthenticated() ? <Assignments /> : <Navigate to="/login" />}

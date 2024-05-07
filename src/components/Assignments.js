@@ -82,7 +82,7 @@ const Assignments = ({route}) => {
   return (
     <Box className="assignments-container" sx={{ maxWidth: 960, margin: 'auto', mt: 4 }}>
       <Typography variant="h3" className="username-title">{username}</Typography>
-      <Button  className="logout-button" variant="contained"  onClick={handleLogout}>
+      <Button   variant="contained"  onClick={handleLogout}>
         Logout
       </Button>
       <div className="container">
