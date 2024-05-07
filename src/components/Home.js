@@ -9,6 +9,7 @@ const Home = () => {
         <h1 className="Header1">
           <span>WORK</span> <span>TRACKING</span> <span>MADE</span> <span>EASY</span><span className="light">No more dues</span>
         </h1>
+        
       </div>
       <div className="right-panel">
         <div className="button-container">

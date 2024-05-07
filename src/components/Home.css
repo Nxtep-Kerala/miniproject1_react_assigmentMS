@@ -55,3 +55,41 @@
 .button:hover {
   background-color: #004080;
 }
+
+/* Media Queries for Mobile Responsiveness */
+@media (max-width: 768px) {
+  .home-container {
+    flex-direction: column;
+    justify-content: center;
+    overflow-y: hidden;
+  }
+
+  .left-panel {
+    padding: 20px;
+    height: auto;
+    text-align: center;
+    background-color: #e8f1fc;
+    height: 100%;
+    width: 100%;
+  }
+  .right-panel{
+    height: 100%;
+    width: 100%;
+    background-color: #e8f1fc;
+  }
+
+  .Header1 {
+    margin-top: 10%;
+    margin-left: 0;
+    color: #0056b3;
+  }
+
+  .button-container {
+    margin-top: -20%;
+    width: 100%;
+  }
+
+  .button {
+    width: 80%;
+  }
+}

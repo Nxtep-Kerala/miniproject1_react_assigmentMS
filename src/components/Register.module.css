@@ -56,7 +56,6 @@
 .inputContainer{
   border-radius: 30px;
   border: 1px solid #0056b3;
-  background: #fff7f4;
   height: 40px;
   width: 100%; /* Use full width on small screens */
   max-width: 400px; /* Limit width on larger screens */
@@ -98,4 +97,36 @@
 
 .registerButton:hover {
   background-color: #0056b3;
+}
+@media (max-width: 768px) {
+  .registerContainer {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .leftPanel {
+    display: none;
+  }
+
+  .Header1 {
+    margin-top: 10%;
+    margin-left: 0;
+  }
+
+  .rightPanel {
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: auto;
+    text-align: center;
+  }
+
+  .inputContainer {
+    width: 80%;
+  }
+
+  .registerButton {
+    width: 80%;
+  }
 }
