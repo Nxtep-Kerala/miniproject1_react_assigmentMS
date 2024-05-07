@@ -1,21 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { dataRef } from "../firebase-config";
 import {
-  Box,
-  TextField,
-  Button,
-  Typography,
-  Stack,
-  Alert,
-  Select,
-  MenuItem,
-  List,
-  ListItem,
-  ListItemText,
-  IconButton,
-  ListItemSecondaryAction,
+  Box, TextField, Button, Typography, Stack, Alert, Select, MenuItem, List, ListItem,
+  ListItemText, IconButton, ListItemSecondaryAction,
+  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { dataRef } from "../firebase-config"; // Firebase Realtime Database reference
+
+const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
 const AdminAssignments = () => {
   const [adminAuthenticated, setAdminAuthenticated] = useState(false);
@@ -30,6 +22,16 @@ const AdminAssignments = () => {
     format: "online",
   });
   const [assignments, setAssignments] = useState([]);
+  const [timetables, setTimetables] = useState(
+    daysOfWeek.reduce((acc, day) => ({ ...acc, [day]: Array(7).fill({ subject: '' }) }), {})
+  );
+
+  useEffect(() => {
+    if (adminAuthenticated && assignment.department) {
+      fetchAssignments(assignment.department);
+      fetchTimetable(assignment.department);
+    }
+  }, [adminAuthenticated, assignment.department]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -40,19 +42,50 @@ const AdminAssignments = () => {
       const adminData = snapshot.val();
       if (adminData && adminData.password === password) {
         setAdminAuthenticated(true);
-        // Set department from adminData if available
         setAssignment(prev => ({
           ...prev,
           department: adminData.department || ""
         }));
         if (adminData.department) {
-          fetchAssignments(adminData.department); // Fetch assignments if department is available
+          fetchAssignments(adminData.department);
+          fetchTimetable(adminData.department);
         }
       } else {
         setError("Invalid admin credentials. Please try again.");
       }
     } catch (err) {
       setError("An error occurred while trying to log in. Please try again later.");
+    }
+  };
+
+  const fetchTimetable = async (department) => {
+    try {
+      const timetableRef = dataRef.ref(`timetables/${department}`);
+      const snapshot = await timetableRef.once("value");
+      const data = snapshot.val() || {};
+      setTimetables(daysOfWeek.reduce((acc, day) => ({
+        ...acc,
+        [day]: data[day] ? data[day].map(period => ({ subject: period.subject || '' })) : Array(7).fill({ subject: '' })
+      }), {}));
+    } catch (err) {
+      setError("Failed to fetch timetable.");
+    }
+  };
+
+  const handleTimetableChange = (value, day, periodIndex) => {
+    setTimetables(prev => ({
+      ...prev,
+      [day]: prev[day].map((item, index) => index === periodIndex ? { ...item, subject: value } : item)
+    }));
+  };
+
+  const saveTimetable = async () => {
+    setError(null);
+    try {
+      await dataRef.ref(`timetables/${assignment.department}`).set(timetables);
+      fetchTimetable(assignment.department);
+    } catch (err) {
+      setError("Failed to save timetable.");
     }
   };
 
@@ -65,29 +98,6 @@ const AdminAssignments = () => {
     } catch (err) {
       setError("Failed to fetch assignments.");
     }
-  };
-
-  useEffect(() => {
-    if (adminAuthenticated && assignment.department) {
-      fetchAssignments(assignment.department);
-    }
-  }, [adminAuthenticated, assignment.department]);
-
-  const handleAssignmentChange = (e) => {
-    const { name, value } = e.target;
-    setAssignment(prev => ({
-      ...prev,
-      [name]: value,
-    }));
-    if (name === "department") {
-      fetchAssignments(value);
-    }
-  };
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const formattedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
-    return formattedDate;
   };
 
   const handleAssignmentSubmit = async (e) => {
@@ -113,6 +123,19 @@ const AdminAssignments = () => {
     } catch (err) {
       setError("Failed to create assignment.");
     }
+  };
+
+  const handleAssignmentChange = (e) => {
+    const { name, value } = e.target;
+    setAssignment(prev => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
   };
 
   const handleDeleteAssignment = async (assignmentId, department) => {
@@ -145,11 +168,48 @@ const AdminAssignments = () => {
   }
 
   return (
-    <Box sx={{ maxWidth: 600, mx: "auto", mt: 4 }}>
+    <Box sx={{ maxWidth: 800, mx: "auto", mt: 4 }}>
+      <Typography variant="h4" gutterBottom>
+        Manage Assignments and Timetable
+      </Typography>
+      {error && <Alert severity="error">{error}</Alert>}
+      <Typography variant="h5" gutterBottom>Timetable Management</Typography>
+      <TableContainer component={Paper}>
+        <Table aria-label="simple timetable">
+          <TableHead>
+            <TableRow>
+              <TableCell>Day</TableCell>
+              {Array.from({ length: 7 }, (_, i) => <TableCell key={i}>Period {i + 1}</TableCell>)}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {daysOfWeek.map(day => (
+              <TableRow key={day}>
+                <TableCell>{day}</TableCell>
+                {timetables[day].map((period, index) => (
+                  <TableCell key={index}>
+                    <TextField
+                      fullWidth
+                      size="small"
+                      variant="outlined"
+                      value={period.subject}
+                      onChange={(e) => handleTimetableChange(e.target.value, day, index)}
+                    />
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <Button variant="contained" color="primary" sx={{ mt: 2, mb: 2 }} onClick={saveTimetable}>
+        Save Timetable
+      </Button>
+
+      {/* Assignment creation and list */}
       <Typography variant="h4" gutterBottom>
         Create Assignment
       </Typography>
-      {error && <Alert severity="error">{error}</Alert>}
       <form onSubmit={handleAssignmentSubmit}>
         <Stack spacing={3}>
           <Select name="department" disabled required value={assignment.department} onChange={handleAssignmentChange} displayEmpty>
@@ -160,7 +220,7 @@ const AdminAssignments = () => {
           </Select>
           <TextField label="Assignment Title" required name="title" value={assignment.title} onChange={handleAssignmentChange} />
           <TextField label="Description" name="description" required value={assignment.description} onChange={handleAssignmentChange} />
-          <TextField  type="date" required name="dueDate" value={assignment.dueDate} onChange={handleAssignmentChange} />
+          <TextField type="date" required name="dueDate" value={assignment.dueDate} onChange={handleAssignmentChange} />
           <Select name="format" required value={assignment.format} onChange={handleAssignmentChange}>
             <MenuItem value="online">Online</MenuItem>
             <MenuItem value="offline">Offline</MenuItem>

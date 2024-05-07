@@ -1,20 +1,36 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { dataRef } from "../firebase-config";
-import { Box, Card, CardContent, Typography, List, ListItem, CircularProgress, Alert, Button} from "@mui/material";
+import {
+  Box, CircularProgress, Alert, Button, Card, CardContent, Typography, LinearProgress,
+  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
+} from '@mui/material';
+
 import "./Assignments.css"; 
+
+const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+
+const getProgressValue = (dueDate) => {
+  const now = new Date();
+  const due = new Date(dueDate);
+  const total = due - now;
+  if (total <= 0) {
+    return 100; 
+  }
+  const passed = new Date() - now;
+  return Math.max(0, (passed / total) * 100);
+};
 
 const Assignments = () => {
   const { department } = useParams();
   const [assignments, setAssignments] = useState([]);
-  const [timetable, setTimetable] = useState([]);
+  const [timetable, setTimetable] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    const formattedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
-    return formattedDate;
+    return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
   };
 
   useEffect(() => {
@@ -22,16 +38,8 @@ const Assignments = () => {
       try {
         const assignmentsRef = dataRef.ref(`assignments/${department}`);
         const snapshot = await assignmentsRef.once("value");
-        const data = snapshot.val();
-        const unsortedAssignments = data ? Object.values(data) : [];
-
-        // Sort assignments by dueDate
-        const sortedAssignments = unsortedAssignments.sort((a, b) => {
-          const dateA = new Date(a.dueDate);
-          const dateB = new Date(b.dueDate);
-          return dateA - dateB;
-        });
-
+        const data = snapshot.val() || {};
+        const sortedAssignments = Object.values(data).sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
         setAssignments(sortedAssignments);
       } catch (err) {
         setError("Failed to load assignments.");
@@ -42,8 +50,8 @@ const Assignments = () => {
       try {
         const timetableRef = dataRef.ref(`timetables/${department}`);
         const snapshot = await timetableRef.once("value");
-        const data = snapshot.val();
-        setTimetable(data ? Object.values(data) : []);
+        const data = snapshot.val() || {};
+        setTimetable(data);
       } catch (err) {
         setError("Failed to load timetable.");
       }
@@ -60,28 +68,8 @@ const Assignments = () => {
   }, [department]);
 
   const handleLogout = () => {
-    // Perform logout actions here (e.g., clearing session, local storage)
-    // Redirect to the login page
     window.location.href = "/login";
   };
-
-  // Prevent navigating back to this page after logout
-  useEffect(() => {
-    const handleBeforeUnload = (event) => {
-      // Cancel the navigation attempt
-      event.preventDefault();
-      // Manually reset the URL to the current page
-      window.history.pushState(null, "", window.location.href);
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    return () => {
-      // Clean up the event listener on component unmount
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, []);
-
 
   if (loading) {
     return <CircularProgress />;
@@ -92,8 +80,8 @@ const Assignments = () => {
   }
 
   return (
-    <Box className="assignments-container">
-      <Button variant="contained" color="primary" onClick={handleLogout} className="Logout">
+    <Box className="assignments-container" sx={{ maxWidth: 960, margin: 'auto', mt: 4 }}>
+      <Button variant="contained" color="primary" onClick={handleLogout}>
         Logout
       </Button>
       <div className="container">
@@ -104,46 +92,51 @@ const Assignments = () => {
         </Typography>
       </div>
     </div>
-      
+      <TableContainer component={Paper}>
+        <Table aria-label="simple timetable">
+          <TableHead>
+            <TableRow>
+              <TableCell>Day / Period</TableCell>
+              {Array.from({ length: 7 }, (_, i) => (
+                <TableCell key={i}>Period {i + 1}</TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {daysOfWeek.map(day => (
+              <TableRow key={day}>
+                <TableCell component="th" scope="row">{day}</TableCell>
+                {(timetable[day] || Array(7).fill({ subject: '' })).map((period, index) => (
+                  <TableCell key={index}>{period.subject}</TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <div className="container">
+      <div className="rectangle-4"></div>
+      <div className="heading">
+        <Typography variant="h4" gutterBottom>
+          Assignments for {department}
+        </Typography>
+      </div>
+    </div>
       {assignments.length > 0 ? (
         assignments.map((assignment, index) => (
-          <Card key={index} className="assignment-card" sx={{ borderRadius: 8 }}>
+          <Card key={index} className="assignment-card" sx={{ borderRadius: 8, m: 1 }}>
             <CardContent>
-              <Typography variant="h5" className="assignment-title">
-                {assignment.title}
-              </Typography>
-              <Typography variant="body2" className="assignment-details">
-                by: {assignment.createdBy} 
-              </Typography>
+              <Typography variant="h5" className="assignment-title">{assignment.title}</Typography>
+              <Typography variant="body2" className="assignment-details">by: {assignment.createdBy}</Typography>
               <Typography className="assignment-due">Due: {formatDate(assignment.dueDate)}</Typography>
-              <Typography variant="body2" className="assignment-details">
-                {assignment.description}
-              </Typography>
-              <Typography variant="caption" className="assignment-details">
-                {assignment.format.toUpperCase()}
-              </Typography>
-              
+              <Typography variant="body2" className="assignment-details">{assignment.description}</Typography>
+              <Typography variant="caption" className="assignment-details">{assignment.format.toUpperCase()}</Typography>
+              <LinearProgress variant="determinate" value={getProgressValue(assignment.dueDate)} sx={{ mt: 1 }} />
             </CardContent>
           </Card>
         ))
       ) : (
         <Typography>No assignments available.</Typography>
-      )}
-      <Typography variant="h5" className="timetable-list">
-        Timetable
-      </Typography>
-      {timetable.length > 0 ? (
-        <List>
-          {timetable.map((subject, index) => (
-            <ListItem key={index} className="timetable-item">
-              <Typography>
-                {subject.day}: {subject.subject}
-              </Typography>
-            </ListItem>
-          ))}
-        </List>
-      ) : (
-        <Typography>No timetable available.</Typography>
       )}
     </Box>
   );
