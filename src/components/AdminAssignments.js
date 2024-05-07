@@ -126,8 +126,16 @@ const AdminAssignments = () => {
       return;
     }
     try {
+      const adminUsername = username;
+
+    // Create the assignment data object with additional createdBy field
+    const assignmentData = {
+      ...assignment,
+      createdBy: adminUsername, // Store the admin's username with the assignment
+    };
       const assignmentsRef = dataRef.ref(`assignments/${assignment.department}`).push();
       await assignmentsRef.set(assignment);
+      await assignmentsRef.set(assignmentData);
       fetchAssignments(assignment.department);
       setAssignment({
         department: assignment.department,

@@ -28,10 +28,10 @@
 }
 
 .Header1 {
-  font-size: 36px;
-  font-weight: bold;
-  margin-top: 32%;
-  margin-left: 30%;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 34%;
+  margin-left: 32%;
   color: white;
 }
 
